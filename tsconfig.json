@@ -9,6 +9,9 @@
   ],
   "references": [
     {
+      "path": "packages/process-socket/tsconfig.json"
+    },
+    {
       "path": "packages/runtime/tsconfig.json"
     }
   ]
