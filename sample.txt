@@ -1,0 +1,32 @@
+import "reflect-metadata";
+type Constructor<T=unknown> = {new (): T};
+
+const apiDefs = new Map<string, any>();
+
+const ApiDefinition = (name: string) => <T extends Function>(target: T) => {
+  Reflect.metadata('api:definition', name)(target);
+  return target;
+}
+
+const ApiImplementation = <T extends Function|Constructor>(type: T) => <U>(target: Constructor<U>) => {
+  const name = Reflect.getMetadata('api:definition', type) ?? type.name;
+  apiDefs.set(name, target);
+  Reflect.metadata('api:implementation', name)(target)
+  return target;
+}
+
+@ApiDefinition('foo-api')
+abstract class IFoo {
+  abstract method1(): string;
+}
+
+@ApiImplementation(IFoo)
+class Foo implements IFoo {
+  method1() {
+    return 'bar';
+  }
+}
+
+
+console.log(Reflect.getMetadataKeys(Foo));
+console.log(Reflect.getMetadata('api:implementation', Foo));
