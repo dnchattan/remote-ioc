@@ -1,4 +1,5 @@
 import 'reflect-metadata';
+import { ConcreteConstructor, Constructor } from '../Types';
 import { getApiDefinition } from './ApiDefinition';
 import { providers, MetadataKeys } from './State';
 

@@ -1,4 +1,5 @@
 import 'reflect-metadata';
+import { Constructor } from '../Types';
 import { definitions, MetadataKeys } from './State';
 
 export const ApiDefinition = (name: string) => <T extends Constructor>(target: T): T => {
