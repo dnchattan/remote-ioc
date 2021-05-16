@@ -30,31 +30,51 @@ describe('@ApiConsumer', () => {
     expect(() => new Test().consumer).toThrow(`Provider not found for 'def'`);
   });
 
-  it('with local provider', () => {
+  it('with local provider', async () => {
     @ApiDefinition('def', testRuntime)
-    class Definition1 {}
+    class Definition1 {
+      // eslint-disable-next-line class-methods-use-this
+      async method1() {
+        throw new Error();
+      }
+    }
 
     @ApiProvider(Definition1, testRuntime)
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    class Definition1Impl {}
+    class Definition1Impl {
+      // eslint-disable-next-line class-methods-use-this
+      async method1() {
+        return 'test';
+      }
+    }
 
     class Test {
       @ApiConsumer(testRuntime)
       public readonly consumer!: Definition1;
     }
-    expect(() => new Test().consumer).not.toThrow();
+    expect(await new Test().consumer.method1()).toEqual('test');
   });
 
-  it('with remote provider', () => {
+  it('with remote provider', async () => {
     const remoteRuntime = new Runtime();
     const socket = new InProcSocket();
     @ApiDefinition('def', testRuntime)
     @ApiDefinition('def', remoteRuntime)
-    class Definition1 {}
+    class Definition1 {
+      // eslint-disable-next-line class-methods-use-this
+      method1(): Promise<string> {
+        throw new Error();
+      }
+    }
 
     @ApiProvider(Definition1, remoteRuntime)
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    class Definition1Impl {}
+    class Definition1Impl {
+      // eslint-disable-next-line class-methods-use-this
+      async method1() {
+        return 'test';
+      }
+    }
 
     testRuntime.connect(socket);
     remoteRuntime.connect(socket);
@@ -63,6 +83,6 @@ describe('@ApiConsumer', () => {
       @ApiConsumer(testRuntime)
       public readonly consumer!: Definition1;
     }
-    expect(() => new Test().consumer).not.toThrow();
+    expect(await new Test().consumer.method1()).toEqual('test');
   });
 });

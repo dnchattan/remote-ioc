@@ -49,7 +49,7 @@ export class Runtime {
     if (!localProvider) {
       throw new Error(`Provider not found for '${getApiDefinitionName(definition)}'`);
     }
-    if (localProvider.instance) {
+    if (!localProvider.instance) {
       // eslint-disable-next-line new-cap
       localProvider.instance = new localProvider.provider();
     }
@@ -70,9 +70,11 @@ export class Runtime {
   public connect(socket: IPCSocket): void {
     socket.on('$runtime', 'discover', this.onDiscover.bind(this, socket));
     const provides: string[] = [];
-    for (const provider of this.providerMap.values()) {
-      provides.push(provider.definitionDescriptor.name);
-      exportApi(provider.provider, provider.definitionDescriptor.name, socket);
+    for (const {
+      definitionDescriptor: { name, definition },
+    } of this.providerMap.values()) {
+      provides.push(name);
+      exportApi(this, definition, name, socket);
     }
     const message: DiscoverMessage = {
       id: this.id,
@@ -110,8 +112,10 @@ export class Runtime {
     }
     const message: DiscoverMessage = { id: this.id, provides };
     for (const [, { socket }] of this.socketMap) {
-      for (const { provider, definitionDescriptor } of providers) {
-        exportApi(provider, definitionDescriptor.name, socket);
+      for (const {
+        definitionDescriptor: { definition, name },
+      } of providers) {
+        exportApi(this, definition, name, socket);
       }
       socket.send('$runtime', 'discover', message);
     }
