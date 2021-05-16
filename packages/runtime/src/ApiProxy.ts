@@ -1,7 +1,7 @@
 import type { Serializable } from 'child_process';
 import { PromiseStore } from './PromiseStore';
 import { DefaultedMap } from './Helpers';
-import { IPCSocket, Metadata } from './Interfaces';
+import { IPCSocket } from './Interfaces';
 
 const promises = new PromiseStore();
 
@@ -23,12 +23,6 @@ export class ApiProxy {
   constructor(private readonly uid: string, private readonly socket: IPCSocket) {
     socket.on(uid, 'set-promise', setPromise);
     socket.on(uid, 'send-event', this.sendEvent.bind(this));
-  }
-
-  public getMetadata(): Promise<Metadata> {
-    const [promiseId, result] = promises.create();
-    this.socket.send(this.uid, 'get-metadata', promiseId);
-    return result;
   }
 
   public get(propertyName: string) {

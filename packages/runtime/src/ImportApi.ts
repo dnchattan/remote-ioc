@@ -1,10 +1,13 @@
 import { ApiProxy } from './ApiProxy';
-import { IPCSocket, PropertyType } from './Interfaces';
+import { IPCSocket, Metadata, PropertyType } from './Interfaces';
 import type { Promisify } from './Types';
 
-export async function importApi<T extends {}>(uid: string, socket: IPCSocket): Promise<Promisify<T>> {
+export async function importApi<T extends {}>(
+  uid: string,
+  socket: IPCSocket,
+  metadata: Metadata
+): Promise<Promisify<T>> {
   const proxy = new ApiProxy(uid, socket);
-  const metadata = await proxy.getMetadata();
   const api: Promisify<T> = {} as Promisify<T>;
 
   for (const [key, type] of Object.entries(metadata.props)) {

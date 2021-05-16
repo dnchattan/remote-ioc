@@ -1,6 +1,6 @@
 export type Channel =
   | 'discover'
-  | 'get-metadata'
+  | 'create'
   | 'get'
   | 'call'
   | 'subscribe'

@@ -1,42 +1,7 @@
 import type { Serializable } from 'child_process';
+import { apiHasEvents } from './GenerateMetadata';
 import { assert } from './Helpers';
-import { IPCSocket, Metadata, PropertyType } from './Interfaces';
-
-function apiHasEvents(
-  api: any
-): api is {
-  off(eventName: string, handler: (...args: any[]) => void): void;
-  on(eventName: string, handler: (...args: any[]) => void): void;
-} {
-  return api.on && typeof api.on === 'function';
-}
-
-const internalKeys = ['constructor', 'on', 'off', 'emit'];
-
-function generateApiMetadata(api: any) {
-  const apiMetadata: Metadata = { props: {} };
-  for (const [key, descriptor] of Object.entries({
-    ...Object.getOwnPropertyDescriptors(Object.getPrototypeOf(api)),
-    ...Object.getOwnPropertyDescriptors(api),
-  })) {
-    if (internalKeys.includes(key)) {
-      continue;
-    }
-    if (descriptor.get) {
-      apiMetadata.props[key] = PropertyType.Accessor;
-      continue;
-    }
-    if (descriptor.value) {
-      if (typeof descriptor.value === 'function') {
-        apiMetadata.props[key] = PropertyType.Method;
-      } else {
-        apiMetadata.props[key] = PropertyType.Accessor;
-      }
-    }
-  }
-  apiMetadata.hasEvents = apiHasEvents(api);
-  return apiMetadata;
-}
+import { IPCSocket } from './Interfaces';
 
 /**
  * Exposes an API to remote processes over the provided pipe
@@ -46,7 +11,6 @@ export class ApiExport<T> {
   constructor(private readonly api: T, private readonly uid: string, private readonly socket: IPCSocket) {
     socket.on(uid, 'get', this.get.bind(this));
     socket.on(uid, 'call', this.call.bind(this));
-    socket.on(uid, 'get-metadata', this.getMetadata.bind(this));
     socket.on(uid, 'subscribe', this.subscribe.bind(this));
     socket.on(uid, 'unsubscribe', this.unsubscribe.bind(this));
   }
@@ -75,15 +39,6 @@ export class ApiExport<T> {
         message: e.message,
         errorTag: e.errorTag,
       });
-    }
-  }
-
-  private async getMetadata(promiseId: string): Promise<void> {
-    try {
-      const metadata: Metadata = generateApiMetadata(this.api);
-      this.socket.send(this.uid, 'set-promise', promiseId, true /* success */, metadata);
-    } catch (e) {
-      this.socket.send(this.uid, 'set-promise', promiseId, false, e);
     }
   }
 

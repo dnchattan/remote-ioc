@@ -1,7 +1,7 @@
 import { Metadata, PropertyType } from './Interfaces';
 import { Constructor } from './Types';
 
-function apiHasEvents(
+export function apiHasEvents(
   api: any
 ): api is {
   off(eventName: string, handler: (...args: any[]) => void): void;
