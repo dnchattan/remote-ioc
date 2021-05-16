@@ -6,7 +6,8 @@ import { MetadataKeys } from './State';
 export const ApiDefinition = (name: string, runtime: Runtime = getDefaultRuntime()) => <T extends Constructor>(
   target: T
 ): T => {
-  if (Reflect.hasMetadata(MetadataKeys.definition, target)) {
+  const currentMetadata = Reflect.getMetadata(MetadataKeys.definition, target);
+  if (currentMetadata && currentMetadata !== name) {
     throw new Error(`Target already decorated with an @ApiDefintion`);
   }
   runtime.registerDefinition(name, target);

@@ -2,7 +2,8 @@ import type { Serializable } from 'child_process';
 import { apiHasEvents } from './GenerateMetadata';
 import { assert } from './Helpers';
 import { IPCSocket } from './Interfaces';
-import { ConcreteConstructor } from './Types';
+import type { Runtime } from './Runtime';
+import { Constructor } from './Types';
 
 /**
  * Exposes an API to remote processes over the provided pipe
@@ -11,7 +12,8 @@ export class ApiExport<T> {
   private enabledEvents = new Map<string, (...args: any[]) => void>();
   private instance?: T;
   constructor(
-    private readonly provider: ConcreteConstructor<T>,
+    private readonly runtime: Runtime,
+    private readonly definition: Constructor<T>,
     private readonly uid: string,
     private readonly socket: IPCSocket
   ) {
@@ -22,10 +24,8 @@ export class ApiExport<T> {
   }
 
   private get api(): T {
-    // TODO: This should be delegated to the runtime, otherwise we'll create one instance per socket!
     if (!this.instance) {
-      // eslint-disable-next-line new-cap
-      this.instance = new this.provider();
+      this.instance = this.runtime.getInstance<T>(this.definition);
     }
     return this.instance;
   }

@@ -25,7 +25,7 @@ describe('@ApiProvider', () => {
     abstract class Test {}
   });
 
-  it('concreate class', () => {
+  it('concrete class', () => {
     @ApiDefinition('def-1', testRuntime)
     class Definition1 {}
     @ApiProvider(Definition1, testRuntime)

@@ -4,6 +4,7 @@ import { exportApi } from './ExportApi';
 import { generateMetadata } from './GenerateMetadata';
 import { importApi } from './ImportApi';
 import { IPCSocket, Metadata } from './Interfaces';
+import { InProcSocket } from './Tests/InProcSocket';
 import { ConcreteConstructor, Constructor, InstanceOf, Promisify } from './Types';
 
 type SocketId = string;
@@ -38,7 +39,24 @@ export class Runtime {
   private definitionMap = new Map<DefinitionName, DefinitionDescriptor>();
   private providerMap = new Map<Constructor, ProviderDescriptor>();
 
-  public async getProvider<T extends {}>(definition: Constructor<T>): Promise<Promisify<T>> {
+  constructor() {
+    // pipe local providers through a pseudo-socket for consistency
+    this.connect(new InProcSocket());
+  }
+
+  public getInstance<T>(definition: Constructor<T>): T {
+    const localProvider = this.providerMap.get(definition);
+    if (!localProvider) {
+      throw new Error(`Provider not found for '${getApiDefinitionName(definition)}'`);
+    }
+    if (localProvider.instance) {
+      // eslint-disable-next-line new-cap
+      localProvider.instance = new localProvider.provider();
+    }
+    return localProvider.instance as T;
+  }
+
+  public getProvider<T>(definition: Constructor<T>): Promisify<T> {
     const { name, metadata } = this.getDefinitionDescriptor(definition);
     for (const [, { socket, provides }] of this.socketMap) {
       if (provides.includes(name)) {
@@ -46,7 +64,7 @@ export class Runtime {
         return importApi<T>(name, socket, metadata);
       }
     }
-    throw new Error(`Not found`);
+    throw new Error(`Provider not found for '${name}'`);
   }
 
   public connect(socket: IPCSocket): void {
