@@ -62,7 +62,7 @@ describe('@ApiConsumer', () => {
     @ApiDefinition('def', remoteRuntime)
     class Definition1 {
       // eslint-disable-next-line class-methods-use-this
-      method1(): Promise<string> {
+      async method1(): Promise<string> {
         throw new Error();
       }
     }

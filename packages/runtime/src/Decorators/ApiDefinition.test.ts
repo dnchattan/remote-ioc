@@ -10,6 +10,12 @@ describe('@ApiDefinition', () => {
     expect(getApiDefinitionName(Test)).toBeUndefined();
   });
 
+  it('construction fails', () => {
+    @ApiDefinition('non-constructable')
+    class Test {}
+    expect(() => new Test()).toThrow();
+  });
+
   it('abstract class', () => {
     @ApiDefinition('abstract-class', testRuntime)
     abstract class Test {}
