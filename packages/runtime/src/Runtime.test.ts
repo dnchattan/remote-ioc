@@ -2,18 +2,11 @@
 /* eslint-disable class-methods-use-this */
 import { v4 } from 'uuid';
 import { ApiDefinition, ApiProvider, ApiRuntime } from './Decorators';
-import { IPCSocket } from './Interfaces';
 import { Runtime } from './Runtime';
 import { InProcSocket } from './Tests/InProcSocket';
+import { createSocketMock } from './Tests/MockSocket';
 
 describe('Runtime', () => {
-  function createSocketMock(): IPCSocket {
-    return {
-      close: jest.fn(),
-      on: jest.fn(),
-      send: jest.fn(),
-    };
-  }
   it('getDefinition', () => {
     const runtime = new Runtime();
     @ApiDefinition('def')
