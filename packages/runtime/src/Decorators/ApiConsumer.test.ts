@@ -20,14 +20,30 @@ describe('@ApiConsumer', () => {
     expect(() => new Test().consumer).toThrow(`Type 'Definition1' does not have an @ApiDefinition decorator`);
   });
 
-  it('no provider', () => {
+  it('no provider', async () => {
     @ApiDefinition('def', testRuntime)
-    class Definition1 {}
+    class Definition1 {
+      // eslint-disable-next-line class-methods-use-this
+      method1() {
+        return Promise.resolve('');
+      }
+    }
     class Test {
       @ApiConsumer(testRuntime)
       public readonly consumer!: Definition1;
+      // eslint-disable-next-line class-methods-use-this
+      method1() {
+        return Promise.resolve('test');
+      }
     }
-    expect(() => new Test().consumer).toThrow(`Provider not found for 'def'`);
+    // will not throw on access
+    const test = new Test();
+    // throws on first usage after resolving all pending sockets
+    try {
+      await test.consumer.method1();
+    } catch (e) {
+      expect(e).toBeDefined();
+    }
   });
 
   it('with local provider', async () => {

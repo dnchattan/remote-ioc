@@ -2,6 +2,7 @@ import { v4 } from 'uuid';
 import { getApiDefinitionName } from './Decorators/getApiDefinitionName';
 import { exportApi } from './ExportApi';
 import { generateMetadata } from './GenerateMetadata';
+import { DeferredValue, Mutex } from './Helpers';
 import { importApi } from './ImportApi';
 import { IPCSocket, Metadata } from './Interfaces';
 import { InProcSocket } from './Tests/InProcSocket';
@@ -38,6 +39,8 @@ export class Runtime {
   private socketMap = new Map<SocketId, SocketDescriptor>();
   private definitionMap = new Map<DefinitionName, DefinitionDescriptor>();
   private providerMap = new Map<Constructor, ProviderDescriptor>();
+  private outstandingSockets = new Set<IPCSocket>();
+  private connectionMutex?: Mutex;
 
   constructor() {
     // pipe local providers through a pseudo-socket for consistency
@@ -58,16 +61,37 @@ export class Runtime {
 
   public getProvider<T>(definition: Constructor<T>): Promisify<T> {
     const { name, metadata } = this.getDefinitionDescriptor(definition);
-    for (const [, { socket, provides }] of this.socketMap) {
-      if (provides.includes(name)) {
-        // eslint-disable-next-line no-await-in-loop
-        return importApi<T>(name, socket, metadata);
+    const deferredSocket = new DeferredValue<IPCSocket>();
+    const resolveSocket = () => {
+      for (const [, { socket, provides }] of this.socketMap) {
+        if (provides.includes(name)) {
+          // eslint-disable-next-line no-await-in-loop
+          deferredSocket.resolve(socket);
+          return;
+        }
       }
+      deferredSocket.reject(new Error(`Provider not found for '${name}'`));
+    };
+
+    if (this.connectionMutex) {
+      this.connectionMutex.wait().then(resolveSocket);
+    } else {
+      resolveSocket();
     }
-    throw new Error(`Provider not found for '${name}'`);
+    return importApi<T>(name, deferredSocket, metadata);
   }
 
   public connect(socket: IPCSocket): void {
+    this.outstandingSockets.add(socket);
+    if (!this.connectionMutex) {
+      const mutex = new Mutex();
+      mutex.wait()?.then(() => {
+        if (this.connectionMutex === mutex) {
+          delete this.connectionMutex;
+        }
+      });
+      this.connectionMutex = mutex;
+    }
     socket.on('$runtime', 'discover', this.onDiscover.bind(this, socket));
     const provides: string[] = [];
     for (const {
@@ -84,6 +108,10 @@ export class Runtime {
   }
 
   private onDiscover(socket: IPCSocket, { id, provides }: DiscoverMessage) {
+    this.outstandingSockets.delete(socket);
+    if (this.outstandingSockets.size === 0) {
+      this.connectionMutex?.signal();
+    }
     this.socketMap.set(id, { id, socket, provides });
   }
 

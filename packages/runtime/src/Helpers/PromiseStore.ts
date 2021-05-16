@@ -1,5 +1,5 @@
 import { Serializable } from 'child_process';
-import { assert } from './Helpers';
+import { assert } from './Assert';
 
 type PromiseCallbacks = { resolve: (value: Serializable) => void; reject: (error: Serializable) => void };
 

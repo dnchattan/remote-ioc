@@ -1,8 +1,13 @@
 import { ApiProxy } from './ApiProxy';
+import { DeferredValue } from './Helpers';
 import { IPCSocket, Metadata, PropertyType } from './Interfaces';
 import type { Promisify } from './Types';
 
-export function importApi<T extends {}>(uid: string, socket: IPCSocket, metadata: Metadata): Promisify<T> {
+export function importApi<T extends {}>(
+  uid: string,
+  socket: DeferredValue<IPCSocket>,
+  metadata: Metadata
+): Promisify<T> {
   const proxy = new ApiProxy(uid, socket);
   const api: Promisify<T> = {} as Promisify<T>;
 

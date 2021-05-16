@@ -1,6 +1,5 @@
 import type { Serializable } from 'child_process';
-import { PromiseStore } from './PromiseStore';
-import { DefaultedMap } from './Helpers';
+import { PromiseStore, DefaultedMap, DeferredValue } from './Helpers';
 import { IPCSocket } from './Interfaces';
 
 const promises = new PromiseStore();
@@ -20,28 +19,45 @@ function setPromise(promiseId: number, success: boolean, value: Serializable) {
  */
 export class ApiProxy {
   private eventListeners = new DefaultedMap<string, MessageHandler[]>(() => []);
-  constructor(private readonly uid: string, private readonly socket: IPCSocket) {
-    socket.on(uid, 'set-promise', setPromise);
-    socket.on(uid, 'send-event', this.sendEvent.bind(this));
+  constructor(private readonly uid: string, private readonly deferredSocket: DeferredValue<IPCSocket>) {
+    this.deferredSocket
+      .wait()
+      .then((socket) => {
+        socket.on(uid, 'set-promise', setPromise);
+        socket.on(uid, 'send-event', this.sendEvent.bind(this));
+      })
+      .catch(() => {});
   }
 
-  public get(propertyName: string) {
-    const [promiseId, result] = promises.create();
-    this.socket.send(this.uid, 'get', promiseId, propertyName);
-    return result;
+  public async get(propertyName: string) {
+    try {
+      const socket = await this.deferredSocket.wait();
+
+      const [promiseId, result] = promises.create();
+      socket.send(this.uid, 'get', promiseId, propertyName);
+      return await result;
+    } catch (e) {
+      return Promise.reject(e);
+    }
   }
 
-  public call(methodName: string, ...args: Serializable[]) {
-    const [promiseId, result] = promises.create();
-    this.socket.send(this.uid, 'call', promiseId, methodName, ...args);
-    return result;
+  public async call(methodName: string, ...args: Serializable[]) {
+    try {
+      const socket = await this.deferredSocket.wait();
+
+      const [promiseId, result] = promises.create();
+      socket.send(this.uid, 'call', promiseId, methodName, ...args);
+      return await result;
+    } catch (e) {
+      return Promise.reject(e);
+    }
   }
 
   public on(eventName: string, handler: MessageHandler): this {
     const listenerCount = this.eventListeners.get(eventName).push(handler);
     // first listener of this type?
     if (listenerCount === 1) {
-      this.socket.send(this.uid, 'subscribe', eventName);
+      this.deferredSocket.wait().then((socket) => socket.send(this.uid, 'subscribe', eventName));
     }
     return this;
   }
@@ -55,7 +71,7 @@ export class ApiProxy {
     );
     // last listener of this type?
     if (listeners.length > 0 && newListerers.length === 0) {
-      this.socket.send(this.uid, 'unsubscribe', eventName);
+      this.deferredSocket.wait().then((socket) => socket.send(this.uid, 'unsubscribe', eventName));
     }
     return this;
   }

@@ -31,7 +31,6 @@ describe('process.fork', () => {
     class LocalRuntime {
       @ApiConsumer() public static worker: IForkWorker;
     }
-    await sleep(2000); // TODO: Wait for sockets to send an ack in proxy code to avoid this delay
     expect(await LocalRuntime.worker.method()).toEqual('async-return');
   });
 
