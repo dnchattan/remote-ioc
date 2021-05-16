@@ -22,6 +22,7 @@ export class ApiExport<T> {
   }
 
   private get api(): T {
+    // TODO: This should be delegated to the runtime, otherwise we'll create one instance per socket!
     if (!this.instance) {
       // eslint-disable-next-line new-cap
       this.instance = new this.provider();
