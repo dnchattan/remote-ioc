@@ -4,20 +4,22 @@
       "type": "node",
       "request": "launch",
       "name": "Debug Jest Tests",
-      "cwd": "${workspaceFolder}",
+      "program": "${workspaceRoot}/node_modules/jest/bin/jest.js",
+      "cwd": "${workspaceFolder}/packages/process-socket",
       "args": [
         // "--inspect-brk",
-        "${workspaceRoot}/node_modules/jest/bin/jest.js",
+        // "${workspaceRoot}/node_modules/jest/bin/jest.js",
         "--runInBand",
         "--setupFilesAfterEnv",
         "${workspaceFolder}/scripts/jest-debug-setup.js",
         "--config",
-        "${workspaceFolder}/jest.config.js"
+        "${workspaceFolder}/packages/process-socket/jest.config.js"
       ],
       "sourceMaps": true,
       "skipFiles": [
         "<node_internals>/**"
       ],
+      "autoAttachChildProcesses": true,
       "console": "integratedTerminal",
       "internalConsoleOptions": "neverOpen"
     }

@@ -1,18 +1,23 @@
-import { ProcessPipe } from '../Pipes/ProcessPipe';
+/* eslint-disable max-classes-per-file */
+/* eslint-disable class-methods-use-this */
+import { ApiProvider, ApiSocket } from '@remote-ioc/runtime';
+import { ProcessSocket } from '../ProcessSocket';
+import { IForkWorker } from './Proc.fork.definitions';
 
-class TestApi {
-  async method() {
+@ApiProvider(IForkWorker)
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+export class ForkWorker implements IForkWorker {
+  async method(): Promise<string> {
     return 'async-return';
   }
-  async methodWithParams(...value: number[]) {
+  async methodWithParams(...value: number[]): Promise<string> {
     return `async-return(${value.join(', ')})`;
   }
-  value = 'value-property';
-  get accessor() {
-    return 'accessor-property';
+  value = Promise.resolve('value-property');
+  get accessor(): Promise<string> {
+    return Promise.resolve('accessor-property');
   }
 }
 
-const pipe = new ProcessPipe(process);
-
-exportApi(new TestApi(), 'test-api', pipe);
+@ApiSocket(() => new ProcessSocket(process))
+export class RemoteRuntime {}
