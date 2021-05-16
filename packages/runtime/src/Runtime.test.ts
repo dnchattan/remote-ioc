@@ -18,7 +18,9 @@ describe('Runtime', () => {
     const runtime = new Runtime();
     @ApiDefinition('def', runtime)
     class Test {
-      method1(): void {}
+      method1(): Promise<void> {
+        throw new Error();
+      }
     }
     expect(runtime.getDefinition('def')).toBe(Test);
   });
@@ -34,7 +36,9 @@ describe('Runtime', () => {
       const runtime = new Runtime();
       @ApiDefinition('def', runtime)
       class Test {
-        method1(): void {}
+        method1(): Promise<void> {
+          throw new Error();
+        }
       }
       @ApiProvider(Test, runtime)
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -63,7 +67,9 @@ describe('Runtime', () => {
       const runtime = new Runtime();
       @ApiDefinition('def', runtime)
       class Test {
-        method1(): void {}
+        method1(): Promise<void> {
+          throw new Error();
+        }
       }
       runtime.connect(remoteSocket);
       runtime.connect(socket);
@@ -109,7 +115,7 @@ describe('Runtime', () => {
       @ApiDefinition('def', runtime)
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       class Def {
-        method1(): string {
+        method1(): Promise<string> {
           throw new Error();
         }
       }

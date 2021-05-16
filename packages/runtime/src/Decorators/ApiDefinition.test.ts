@@ -16,12 +16,6 @@ describe('@ApiDefinition', () => {
     expect(() => new Test()).toThrow();
   });
 
-  it('abstract class', () => {
-    @ApiDefinition('abstract-class', testRuntime)
-    abstract class Test {}
-    expect(getApiDefinitionName(Test)).toEqual('abstract-class');
-  });
-
   it('concrete class', () => {
     @ApiDefinition('concrete-class', testRuntime)
     class Test {}

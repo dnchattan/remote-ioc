@@ -5,7 +5,7 @@ import { generateMetadata } from './GenerateMetadata';
 import { importApi } from './ImportApi';
 import { IPCSocket, Metadata } from './Interfaces';
 import { InProcSocket } from './Tests/InProcSocket';
-import { ConcreteConstructor, Constructor, InstanceOf, Promisify } from './Types';
+import { Constructor, InstanceOf, Promisify } from './Types';
 
 type SocketId = string;
 type DefinitionName = string;
@@ -22,7 +22,7 @@ interface DefinitionDescriptor {
   metadata: Metadata;
 }
 
-interface ProviderDescriptor<T extends ConcreteConstructor = ConcreteConstructor<unknown>> {
+interface ProviderDescriptor<T extends Constructor = Constructor<unknown>> {
   definitionDescriptor: DefinitionDescriptor;
   provider: T;
   instance?: InstanceOf<T>;
@@ -121,7 +121,7 @@ export class Runtime {
     }
   }
 
-  public registerProvider(definition: Constructor, provider: ConcreteConstructor): void {
+  public registerProvider(definition: Constructor, provider: Constructor): void {
     const definitionDescriptor = this.getDefinitionDescriptor(definition);
     if (this.providerMap.has(definition)) {
       throw new Error(`Api provider already exists for the defintion '${definitionDescriptor.name}'.`);

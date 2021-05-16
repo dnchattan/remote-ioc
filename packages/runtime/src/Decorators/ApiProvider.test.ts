@@ -16,15 +16,6 @@ describe('@ApiProvider', () => {
     expect(getApiProviderNames(Test)).toEqual([]);
   });
 
-  it('abstract class', () => {
-    @ApiDefinition('def-1', testRuntime)
-    class Definition1 {}
-    // @ts-expect-error
-    @ApiProvider(Definition1, testRuntime)
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    abstract class Test {}
-  });
-
   it('concrete class', () => {
     @ApiDefinition('def-1', testRuntime)
     class Definition1 {}
@@ -38,7 +29,7 @@ describe('@ApiProvider', () => {
     @ApiDefinition('def-1', testRuntime)
     class Definition1 {}
     @ApiDefinition('def-2', testRuntime)
-    abstract class Definition2 {}
+    class Definition2 {}
 
     @ApiProvider(Definition1, testRuntime)
     @ApiProvider(Definition2, testRuntime)

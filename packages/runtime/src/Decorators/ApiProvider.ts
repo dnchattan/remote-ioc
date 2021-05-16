@@ -1,10 +1,10 @@
 import 'reflect-metadata';
 import { getDefaultRuntime, Runtime } from '../Runtime';
-import type { ConcreteConstructor, Constructor } from '../Types';
+import type { Constructor } from '../Types';
 import { MetadataKeys } from './State';
 
 export const ApiProvider = <T extends Constructor>(definition: T, runtime: Runtime = getDefaultRuntime()) => <
-  U extends ConcreteConstructor
+  U extends Constructor
 >(
   target: U
 ): U => {

@@ -4,26 +4,8 @@ import { PropertyType } from './Interfaces';
 
 /* eslint-disable class-methods-use-this */
 describe('generateMetadata', () => {
-  it('abstract class', () => {
-    abstract class Test {
-      method1(): string {
-        throw new Error();
-      }
-      get prop1(): string {
-        throw new Error();
-      }
-    }
-    const metadata = generateMetadata(Test);
-    expect(metadata).toEqual({
-      props: {
-        method1: PropertyType.Method,
-        prop1: PropertyType.Accessor,
-      },
-      hasEvents: undefined,
-    });
-  });
   it('inheritance', () => {
-    abstract class Base {
+    class Base {
       method1(): string {
         throw new Error();
       }
@@ -31,7 +13,7 @@ describe('generateMetadata', () => {
         throw new Error();
       }
     }
-    abstract class Derived extends Base {
+    class Derived extends Base {
       method1(): string {
         throw new Error();
       }
