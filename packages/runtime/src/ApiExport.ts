@@ -2,17 +2,31 @@ import type { Serializable } from 'child_process';
 import { apiHasEvents } from './GenerateMetadata';
 import { assert } from './Helpers';
 import { IPCSocket } from './Interfaces';
+import { ConcreteConstructor } from './Types';
 
 /**
  * Exposes an API to remote processes over the provided pipe
  */
 export class ApiExport<T> {
   private enabledEvents = new Map<string, (...args: any[]) => void>();
-  constructor(private readonly api: T, private readonly uid: string, private readonly socket: IPCSocket) {
+  private instance?: T;
+  constructor(
+    private readonly provider: ConcreteConstructor<T>,
+    private readonly uid: string,
+    private readonly socket: IPCSocket
+  ) {
     socket.on(uid, 'get', this.get.bind(this));
     socket.on(uid, 'call', this.call.bind(this));
     socket.on(uid, 'subscribe', this.subscribe.bind(this));
     socket.on(uid, 'unsubscribe', this.unsubscribe.bind(this));
+  }
+
+  private get api(): T {
+    if (!this.instance) {
+      // eslint-disable-next-line new-cap
+      this.instance = new this.provider();
+    }
+    return this.instance;
   }
 
   private forwardEvent(eventName: string, ...args: any[]) {

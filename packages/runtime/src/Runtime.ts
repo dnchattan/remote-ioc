@@ -38,17 +38,12 @@ export class Runtime {
   private definitionMap = new Map<DefinitionName, DefinitionDescriptor>();
   private providerMap = new Map<Constructor, ProviderDescriptor>();
 
-  private getProviderNames(): string[] {
-    return Array.from(this.providerMap.values()).map((provider) => provider.definitionDescriptor.name);
-  }
-
   public async getProvider<T extends {}>(definition: Constructor<T>): Promise<Promisify<T>> {
     const { name, metadata } = this.getDefinitionDescriptor(definition);
     for (const [, { socket, provides }] of this.socketMap) {
       if (provides.includes(name)) {
-        socket.send('$runtime', 'create', name);
         // eslint-disable-next-line no-await-in-loop
-        return importApi<T>(definition.name, socket, metadata);
+        return importApi<T>(name, socket, metadata);
       }
     }
     throw new Error(`Not found`);
@@ -56,32 +51,20 @@ export class Runtime {
 
   public connect(socket: IPCSocket): void {
     socket.on('$runtime', 'discover', this.onDiscover.bind(this, socket));
-    socket.on('$runtime', 'create', this.onCreate.bind(this, socket));
+    const provides: string[] = [];
+    for (const provider of this.providerMap.values()) {
+      provides.push(provider.definitionDescriptor.name);
+      exportApi(provider.provider, provider.definitionDescriptor.name, socket);
+    }
     const message: DiscoverMessage = {
       id: this.id,
-      provides: this.getProviderNames(),
+      provides,
     };
     socket.send('$runtime', 'discover', message);
   }
 
   private onDiscover(socket: IPCSocket, { id, provides }: DiscoverMessage) {
     this.socketMap.set(id, { id, socket, provides });
-  }
-
-  private onCreate(socket: IPCSocket, name: DefinitionName) {
-    const definition = this.getDefinition(name);
-    if (!definition) {
-      // should not be possible!
-      return;
-    }
-    const provider = this.providerMap.get(definition);
-    if (!provider) {
-      // should not be possible!
-      return;
-    }
-    // eslint-disable-next-line new-cap
-    provider.instance = new provider.provider();
-    exportApi(provider.instance as any, name, socket);
   }
 
   private getDefinitionDescriptor(definition: Constructor): DefinitionDescriptor {
@@ -96,9 +79,22 @@ export class Runtime {
     return definitionDescriptor;
   }
 
-  private broadcastDiscoverToAllConnections(definitions: string[]): void {
-    const message: DiscoverMessage = { id: this.id, provides: definitions };
+  private broadcastDiscoverToAllConnections(definitions: DefinitionDescriptor[]): void {
+    const providers: ProviderDescriptor[] = [];
+    const provides: string[] = [];
+    for (const definition of definitions) {
+      const provider = this.providerMap.get(definition.definition);
+      if (!provider) {
+        continue;
+      }
+      provides.push(definition.name);
+      providers.push(provider);
+    }
+    const message: DiscoverMessage = { id: this.id, provides };
     for (const [, { socket }] of this.socketMap) {
+      for (const { provider, definitionDescriptor } of providers) {
+        exportApi(provider, definitionDescriptor.name, socket);
+      }
       socket.send('$runtime', 'discover', message);
     }
   }
@@ -109,7 +105,7 @@ export class Runtime {
       throw new Error(`Api provider already exists for the defintion '${definitionDescriptor.name}'.`);
     }
     this.providerMap.set(definition, { definitionDescriptor, provider });
-    this.broadcastDiscoverToAllConnections([definitionDescriptor.name]);
+    this.broadcastDiscoverToAllConnections([definitionDescriptor]);
   }
 
   public registerDefinition(name: string, definition: Constructor) {
