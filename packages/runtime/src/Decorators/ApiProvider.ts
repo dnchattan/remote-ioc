@@ -1,13 +1,10 @@
 import 'reflect-metadata';
-import { getDefaultRuntime, Runtime } from '../Runtime';
 import type { Constructor } from '../Types';
+import { bindToRuntime } from './ApiRuntime';
 import { MetadataKeys } from './State';
 
-export const ApiProvider = <T extends Constructor>(definition: T, runtime: Runtime = getDefaultRuntime()) => <
-  U extends Constructor
->(
-  target: U
-): U => {
+export const ApiProvider = <T extends Constructor>(definition: T) => <U extends Constructor>(target: U): U => {
+  const runtime = bindToRuntime(target);
   runtime.registerProvider(definition, target);
   const definitions = Reflect.getMetadata(MetadataKeys.provider, target) || [];
   Reflect.metadata(MetadataKeys.provider, [...definitions, definition])(target as Function);

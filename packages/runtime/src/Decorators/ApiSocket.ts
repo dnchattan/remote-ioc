@@ -1,7 +1,7 @@
 import 'reflect-metadata';
 import { IPCSocket } from '../Interfaces';
-import { getDefaultRuntime, Runtime } from '../Runtime';
 import type { Constructor } from '../Types';
+import { bindToRuntime } from './ApiRuntime';
 
 function makeSocket<T extends IPCSocket>(Socket: Constructor<T> | (() => T)) {
   try {
@@ -14,11 +14,11 @@ function makeSocket<T extends IPCSocket>(Socket: Constructor<T> | (() => T)) {
   }
 }
 
-export const ApiSocket = <T extends IPCSocket>(
-  Socket: Constructor<T> | (() => T),
-  runtime: Runtime = getDefaultRuntime()
-) => <U extends Constructor>(target: U): U => {
+export const ApiSocket = <T extends IPCSocket>(Socket: Constructor<T> | (() => T)) => <U extends Constructor>(
+  target: U
+): U => {
   const socket = makeSocket(Socket);
+  const runtime = bindToRuntime(target);
   runtime.connect(socket);
   return target;
 };

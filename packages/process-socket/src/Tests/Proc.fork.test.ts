@@ -29,7 +29,7 @@ describe('process.fork', () => {
   it('method(void): Promise<string>', async () => {
     @ApiSocket(() => new ProcessSocket(childProcess))
     class LocalRuntime {
-      @ApiConsumer() public static worker: IForkWorker;
+      @ApiConsumer public static worker: IForkWorker;
     }
     expect(await LocalRuntime.worker.method()).toEqual('async-return');
   });

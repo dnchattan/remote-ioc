@@ -1,15 +1,13 @@
 import 'reflect-metadata';
-import { getDefaultRuntime, Runtime } from '../Runtime';
-import type { Promisify } from '../Types';
+import type { Constructor, InstanceOf, Promisify } from '../Types';
+import { bindToRuntime } from './ApiRuntime';
 
-export const ApiConsumer = <T>(runtime: Runtime = getDefaultRuntime()) => <U>(
-  target: U,
-  propertyKey: string | symbol
-): void => {
-  const definition = Reflect.getMetadata('design:type', target, propertyKey);
+export const ApiConsumer = <U extends Constructor, T>(target: InstanceOf<U>, propertyKey: string | symbol): void => {
+  const definition = Reflect.getMetadata('design:type', target as U, propertyKey);
   let instance: Promisify<T> | undefined;
   Object.defineProperty(target, propertyKey, {
     get() {
+      const runtime = bindToRuntime((target as any).constructor as U);
       if (!instance) {
         instance = runtime.getProvider<T>(definition);
       }

@@ -1,17 +1,18 @@
 import 'reflect-metadata';
-import { getDefaultRuntime, Runtime } from '../Runtime';
 import type { Constructor, InstanceOf, Promisify } from '../Types';
+import { bindToRuntime } from './ApiRuntime';
 import { MetadataKeys } from './State';
 
 export type ApiDefinitionError<T> = 'TypeError: all type members be async' & T;
 
-export const ApiDefinition = (name: string, runtime: Runtime = getDefaultRuntime()) => <T extends Constructor>(
+export const ApiDefinition = (name: string) => <T extends Constructor>(
   target: InstanceOf<T> extends Promisify<InstanceOf<T>>
     ? Promisify<InstanceOf<T>> extends InstanceOf<T>
       ? T
       : ApiDefinitionError<T>
     : ApiDefinitionError<T>
 ): T => {
+  const runtime = bindToRuntime(target);
   const wrapper: T = (target as any).isWrapper
     ? target
     : (class ApiDefinitionWrapper extends (target as any) {

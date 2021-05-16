@@ -11,12 +11,13 @@
       ],
       "args": [
         // "--inspect-brk",
-        // "${workspaceRoot}/node_modules/jest/bin/jest.js",
         "--runInBand",
         "--setupFilesAfterEnv",
         "${workspaceFolder}/scripts/jest-debug-setup.js",
         "--config",
-        "${workspaceFolder}/jest.config.js"
+        "${workspaceFolder}/jest.config.js",
+        // "--testNamePattern",
+        // "@ApiConsumer definition not registered"
       ],
       "sourceMaps": true,
       "skipFiles": [

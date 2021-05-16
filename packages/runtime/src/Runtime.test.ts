@@ -1,7 +1,7 @@
 /* eslint-disable max-classes-per-file */
 /* eslint-disable class-methods-use-this */
 import { v4 } from 'uuid';
-import { ApiDefinition, ApiProvider } from './Decorators';
+import { ApiDefinition, ApiProvider, ApiRuntime } from './Decorators';
 import { IPCSocket } from './Interfaces';
 import { Runtime } from './Runtime';
 import { InProcSocket } from './Tests/InProcSocket';
@@ -16,7 +16,8 @@ describe('Runtime', () => {
   }
   it('getDefinition', () => {
     const runtime = new Runtime();
-    @ApiDefinition('def', runtime)
+    @ApiDefinition('def')
+    @ApiRuntime(runtime)
     class Test {
       method1(): Promise<void> {
         throw new Error();
@@ -34,13 +35,15 @@ describe('Runtime', () => {
     it('before connect()', () => {
       const socket = createSocketMock();
       const runtime = new Runtime();
-      @ApiDefinition('def', runtime)
+      @ApiDefinition('def')
+      @ApiRuntime(runtime)
       class Test {
         method1(): Promise<void> {
           throw new Error();
         }
       }
-      @ApiProvider(Test, runtime)
+      @ApiProvider(Test)
+      // @ApiRuntime(runtime) // inherited from Test
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       class TestImpl extends Test {}
 
@@ -65,7 +68,8 @@ describe('Runtime', () => {
 
       const socket = createSocketMock();
       const runtime = new Runtime();
-      @ApiDefinition('def', runtime)
+      @ApiDefinition('def')
+      @ApiRuntime(runtime)
       class Test {
         method1(): Promise<void> {
           throw new Error();
@@ -78,7 +82,8 @@ describe('Runtime', () => {
         provides: [],
       });
 
-      @ApiProvider(Test, runtime)
+      @ApiProvider(Test)
+      // @ApiRuntime(runtime) // inherited from Test
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       class TestImpl extends Test {}
 
@@ -112,7 +117,8 @@ describe('Runtime', () => {
     const remote = new Runtime();
     const socket = new InProcSocket();
     function register(runtime: Runtime) {
-      @ApiDefinition('def', runtime)
+      @ApiDefinition('def')
+      @ApiRuntime(runtime)
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       class Def {
         method1(): Promise<string> {
@@ -124,7 +130,8 @@ describe('Runtime', () => {
     const localDef = register(local);
     const remoteDef = register(remote);
 
-    @ApiProvider(remoteDef, remote)
+    @ApiProvider(remoteDef)
+    @ApiRuntime(remote)
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     class DefImpl {
       method1() {

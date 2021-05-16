@@ -2,6 +2,7 @@
 import { Runtime } from '../Runtime';
 import { ApiDefinition } from './ApiDefinition';
 import { ApiProvider } from './ApiProvider';
+import { ApiRuntime } from './ApiRuntime';
 import { getApiProviders, getApiProviderNames } from './getApiProviders';
 
 describe('@ApiProvider', () => {
@@ -17,22 +18,29 @@ describe('@ApiProvider', () => {
   });
 
   it('concrete class', () => {
-    @ApiDefinition('def-1', testRuntime)
+    @ApiDefinition('def-1')
+    @ApiRuntime(testRuntime)
     class Definition1 {}
-    @ApiProvider(Definition1, testRuntime)
+
+    @ApiProvider(Definition1)
+    @ApiRuntime(testRuntime)
     class Test {}
+
     expect(getApiProviders(Test)).toEqual([Definition1]);
     expect(getApiProviderNames(Test)).toEqual(['def-1']);
   });
 
   it('multiple on one target', () => {
-    @ApiDefinition('def-1', testRuntime)
+    @ApiDefinition('def-1')
+    @ApiRuntime(testRuntime)
     class Definition1 {}
-    @ApiDefinition('def-2', testRuntime)
+    @ApiDefinition('def-2')
+    @ApiRuntime(testRuntime)
     class Definition2 {}
 
-    @ApiProvider(Definition1, testRuntime)
-    @ApiProvider(Definition2, testRuntime)
+    @ApiProvider(Definition1)
+    @ApiProvider(Definition2)
+    @ApiRuntime(testRuntime)
     class Test {}
     expect(getApiProviders(Test)).toEqual([Definition2, Definition1]);
     expect(getApiProviderNames(Test)).toEqual(['def-2', 'def-1']);
