@@ -9,6 +9,9 @@
   ],
   "references": [
     {
+      "path": "packages/electron-socket/tsconfig.json"
+    },
+    {
       "path": "packages/process-socket/tsconfig.json"
     },
     {
