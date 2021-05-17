@@ -1,0 +1,7 @@
+{
+  "type": "patch",
+  "comment": "initial checkin",
+  "packageName": "@remote-ioc/electron-socket",
+  "email": "dnchattan@gmail.com",
+  "dependentChangeType": "patch"
+}
