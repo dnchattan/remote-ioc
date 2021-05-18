@@ -1,6 +1,21 @@
 {
-  "name": "@remote-ioc/process-socket",
+  "name": "@remote-ioc/socket.io-socket",
   "entries": [
+    {
+      "date": "Tue, 18 May 2021 21:39:37 GMT",
+      "tag": "@remote-ioc/socket.io-socket_v1.0.2",
+      "version": "1.0.2",
+      "comments": {
+        "patch": [
+          {
+            "comment": "add socket.io implementation",
+            "author": "dnchattan@gmail.com",
+            "commit": "488a1b1e5261628eff92f86f4b596dcfdb45138c",
+            "package": "@remote-ioc/socket.io-socket"
+          }
+        ]
+      }
+    },
     {
       "date": "Mon, 17 May 2021 20:40:56 GMT",
       "tag": "@remote-ioc/process-socket_v1.0.1",
