@@ -1,0 +1,7 @@
+{
+  "type": "patch",
+  "comment": "add socket.io implementation",
+  "packageName": "@remote-ioc/socket.io-socket",
+  "email": "dnchattan@gmail.com",
+  "dependentChangeType": "patch"
+}
