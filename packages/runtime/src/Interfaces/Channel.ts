@@ -1,1 +1,9 @@
-export type Channel = 'discover' | 'get' | 'call' | 'subscribe' | 'unsubscribe' | 'set-promise' | 'send-event';
+export type Channel =
+  | 'discover'
+  | 'connected'
+  | 'get'
+  | 'call'
+  | 'subscribe'
+  | 'unsubscribe'
+  | 'set-promise'
+  | 'send-event';

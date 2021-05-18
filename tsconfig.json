@@ -16,6 +16,9 @@
     },
     {
       "path": "packages/runtime/tsconfig.json"
+    },
+    {
+      "path": "packages/socket.io-socket/tsconfig.json"
     }
   ]
 }

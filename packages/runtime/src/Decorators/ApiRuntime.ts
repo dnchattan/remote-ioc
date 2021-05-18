@@ -32,7 +32,9 @@ export function getRuntime<U extends Constructor>(target: U): Runtime {
 }
 
 export function bindToRuntime<U extends Constructor>(target: U): Runtime {
-  let runtime = Reflect.getMetadata(MetadataKeys.runtime, target);
+  let runtime =
+    Reflect.getMetadata(MetadataKeys.runtime, target) ||
+    (target.constructor && Reflect.getMetadata(MetadataKeys.runtime, target.constructor));
   if (!runtime) {
     runtime = getDefaultRuntime();
     ApiRuntime(runtime)(target);

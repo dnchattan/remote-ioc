@@ -16,8 +16,8 @@
         "${workspaceFolder}/scripts/jest-debug-setup.js",
         "--config",
         "${workspaceFolder}/jest.config.js",
-        // "--testNamePattern",
-        // "@ApiConsumer definition not registered"
+        "--testNamePattern",
+        "socket.io"
       ],
       "sourceMaps": true,
       "skipFiles": [

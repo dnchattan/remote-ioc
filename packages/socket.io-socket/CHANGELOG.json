@@ -1,0 +1,20 @@
+{
+  "name": "@remote-ioc/process-socket",
+  "entries": [
+    {
+      "date": "Mon, 17 May 2021 20:40:56 GMT",
+      "tag": "@remote-ioc/process-socket_v1.0.1",
+      "version": "1.0.1",
+      "comments": {
+        "patch": [
+          {
+            "comment": "initial checkin",
+            "author": "dnchattan@gmail.com",
+            "commit": "3845b8f929ad1e7e44b259bbf7076a7e856b4ae3",
+            "package": "@remote-ioc/process-socket"
+          }
+        ]
+      }
+    }
+  ]
+}

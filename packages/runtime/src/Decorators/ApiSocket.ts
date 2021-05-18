@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import 'reflect-metadata';
 import { IPCSocket } from '../Interfaces';
 import type { Constructor, ConstructorWithArgs } from '../Types';
@@ -25,5 +26,21 @@ export const ApiSocket = <T extends ConstructorWithArgs<IPCSocket> | ((...params
   const socket = makeSocket(Socket, ...args);
   const runtime = bindToRuntime(target);
   runtime.connect(socket);
+  /*
+  {
+    close(...params) {
+      console.log(`${socket.constructor.name}: close(${params.join(',')})`);
+      socket.close(params);
+    },
+    on(...params) {
+      console.log(`${socket.constructor.name}: on(${params.join(',')})`);
+      socket.on(...params);
+    },
+    send(...params) {
+      console.log(`${socket.constructor.name}: send(${params.join(',')})`);
+      socket.send(...params);
+    },
+  }
+  */
   return target;
 };

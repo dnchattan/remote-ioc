@@ -74,7 +74,12 @@ export class Runtime {
     };
 
     if (this.connectionMutex) {
-      this.connectionMutex.wait().then(resolveSocket);
+      this.connectionMutex
+        .wait()
+        .then(resolveSocket)
+        .catch((err) => {
+          deferredSocket.reject(err);
+        });
     } else {
       resolveSocket();
     }
@@ -84,15 +89,10 @@ export class Runtime {
   public connect(socket: IPCSocket): void {
     this.outstandingSockets.add(socket);
     if (!this.connectionMutex) {
-      const mutex = new Mutex();
-      mutex.wait()?.then(() => {
-        if (this.connectionMutex === mutex) {
-          delete this.connectionMutex;
-        }
-      });
-      this.connectionMutex = mutex;
+      this.connectionMutex = new Mutex();
     }
     socket.on('$runtime', 'discover', this.onDiscover.bind(this, socket));
+    socket.on('$runtime', 'connected', this.onConnected.bind(this));
     const provides: string[] = [];
     for (const {
       definitionDescriptor: { name, definition },
@@ -107,12 +107,26 @@ export class Runtime {
     socket.send('$runtime', 'discover', message);
   }
 
+  public close(): void {
+    for (const [, { socket }] of this.socketMap) {
+      socket.close();
+    }
+    this.socketMap.clear();
+    this.outstandingSockets.clear();
+    this.connectionMutex?.signal();
+  }
+
+  private onConnected(child: IPCSocket) {
+    this.connect(child);
+  }
+
   private onDiscover(socket: IPCSocket, { id, provides }: DiscoverMessage) {
     this.outstandingSockets.delete(socket);
+    this.socketMap.set(id, { id, socket, provides });
     if (this.outstandingSockets.size === 0) {
       this.connectionMutex?.signal();
+      delete this.connectionMutex;
     }
-    this.socketMap.set(id, { id, socket, provides });
   }
 
   private getDefinitionDescriptor(definition: Constructor): DefinitionDescriptor {
@@ -171,7 +185,10 @@ export class Runtime {
   }
 }
 
-const runtime = new Runtime();
+let runtime: Runtime;
 export function getDefaultRuntime() {
+  if (!runtime) {
+    runtime = new Runtime();
+  }
   return runtime;
 }
