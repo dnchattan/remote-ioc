@@ -2,6 +2,21 @@
   "name": "@remote-ioc/socket.io-socket",
   "entries": [
     {
+      "date": "Wed, 19 May 2021 12:03:08 GMT",
+      "tag": "@remote-ioc/socket.io-socket_v1.0.3",
+      "version": "1.0.3",
+      "comments": {
+        "patch": [
+          {
+            "comment": "Bump @remote-ioc/runtime to v1.0.2",
+            "author": "dnchattan@gmail.com",
+            "commit": "4f68499cbc47d134b5ad0d9e8bf0c1995933ed10",
+            "package": "@remote-ioc/socket.io-socket"
+          }
+        ]
+      }
+    },
+    {
       "date": "Tue, 18 May 2021 21:39:37 GMT",
       "tag": "@remote-ioc/socket.io-socket_v1.0.2",
       "version": "1.0.2",
