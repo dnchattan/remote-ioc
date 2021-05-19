@@ -1,0 +1,7 @@
+{
+  "type": "patch",
+  "comment": "add 'off' to non-promise keys in Promisify",
+  "packageName": "@remote-ioc/runtime",
+  "email": "dnchattan@gmail.com",
+  "dependentChangeType": "patch"
+}
