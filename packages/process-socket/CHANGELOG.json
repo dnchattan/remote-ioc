@@ -2,6 +2,21 @@
   "name": "@remote-ioc/process-socket",
   "entries": [
     {
+      "date": "Fri, 21 May 2021 21:37:43 GMT",
+      "tag": "@remote-ioc/process-socket_v1.0.4",
+      "version": "1.0.4",
+      "comments": {
+        "patch": [
+          {
+            "comment": "Bump @remote-ioc/runtime to v1.0.4",
+            "author": "dnchattan@gmail.com",
+            "commit": "ed482d5e72a9a32c952ebac04d3d48e7fd2025b1",
+            "package": "@remote-ioc/process-socket"
+          }
+        ]
+      }
+    },
+    {
       "date": "Wed, 19 May 2021 20:38:06 GMT",
       "tag": "@remote-ioc/process-socket_v1.0.2",
       "version": "1.0.2",

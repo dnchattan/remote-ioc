@@ -1,7 +1,0 @@
-{
-  "type": "patch",
-  "comment": "move inprocsocket to published location",
-  "packageName": "@remote-ioc/runtime",
-  "email": "dnchattan@gmail.com",
-  "dependentChangeType": "patch"
-}

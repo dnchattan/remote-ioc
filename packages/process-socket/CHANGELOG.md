@@ -1,8 +1,16 @@
 # Change Log - @remote-ioc/process-socket
 
-This log was last generated on Wed, 19 May 2021 20:38:06 GMT and should not be manually modified.
+This log was last generated on Fri, 21 May 2021 21:37:43 GMT and should not be manually modified.
 
 <!-- Start content -->
+
+## 1.0.4
+
+Fri, 21 May 2021 21:37:43 GMT
+
+### Patches
+
+- Bump @remote-ioc/runtime to v1.0.4 (dnchattan@gmail.com)
 
 ## 1.0.2
 
