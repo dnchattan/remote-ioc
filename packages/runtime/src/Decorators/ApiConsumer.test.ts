@@ -1,6 +1,6 @@
 /* eslint-disable max-classes-per-file */
 import { Runtime } from '../Runtime';
-import { InProcSocket } from '../Tests/InProcSocket';
+import { InProcSocket } from '../InProcSocket';
 import { ApiConsumer } from './ApiConsumer';
 import { ApiDefinition } from './ApiDefinition';
 import { ApiProvider } from './ApiProvider';

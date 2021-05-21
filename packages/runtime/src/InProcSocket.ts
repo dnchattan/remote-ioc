@@ -1,5 +1,5 @@
-import { DefaultedMap } from '../Helpers';
-import { IPCSocket } from '../Interfaces';
+import { DefaultedMap } from './Helpers';
+import { IPCSocket } from './Interfaces';
 
 export class InProcSocket implements IPCSocket {
   private handlers = new DefaultedMap<string, ((...args: any[]) => void)[]>(() => []);

@@ -5,7 +5,7 @@ import { generateMetadata } from './GenerateMetadata';
 import { DeferredValue, Mutex } from './Helpers';
 import { importApi } from './ImportApi';
 import { IPCSocket, Metadata } from './Interfaces';
-import { InProcSocket } from './Tests/InProcSocket';
+import { InProcSocket } from './InProcSocket';
 import { Constructor, InstanceOf, Promisify } from './Types';
 
 type SocketId = string;

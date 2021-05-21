@@ -3,7 +3,7 @@
 import { v4 } from 'uuid';
 import { ApiDefinition, ApiProvider, ApiRuntime } from './Decorators';
 import { Runtime } from './Runtime';
-import { InProcSocket } from './Tests/InProcSocket';
+import { InProcSocket } from './InProcSocket';
 import { createSocketMock } from './Tests/MockSocket';
 
 describe('Runtime', () => {
