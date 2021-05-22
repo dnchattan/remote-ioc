@@ -78,6 +78,35 @@ describe('@ApiConsumer', () => {
     expect(await new Test().consumer.method1()).toEqual('test');
   });
 
+  // it('declared before provider', async () => {
+  //   @ApiRuntime(testRuntime)
+  //   class Test {
+  //     @ApiConsumer
+  //     public readonly consumer!: Definition1;
+  //   }
+
+  //   @ApiDefinition('def')
+  //   @ApiRuntime(testRuntime)
+  //   class Definition1 {
+  //     // eslint-disable-next-line class-methods-use-this
+  //     async method1() {
+  //       throw new Error();
+  //     }
+  //   }
+
+  //   @ApiProvider(Definition1)
+  //   @ApiRuntime(testRuntime)
+  //   // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  //   class Definition1Impl {
+  //     // eslint-disable-next-line class-methods-use-this
+  //     async method1() {
+  //       return 'test';
+  //     }
+  //   }
+
+  //   expect(await new Test().consumer.method1()).toEqual('test');
+  // });
+
   it('with remote provider', async () => {
     const remoteRuntime = new Runtime();
     const socket = new InProcSocket();
