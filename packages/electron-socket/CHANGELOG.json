@@ -2,6 +2,21 @@
   "name": "@remote-ioc/electron-socket",
   "entries": [
     {
+      "date": "Sat, 22 May 2021 21:15:56 GMT",
+      "tag": "@remote-ioc/electron-socket_v1.0.5",
+      "version": "1.0.5",
+      "comments": {
+        "patch": [
+          {
+            "comment": "Bump @remote-ioc/runtime to v1.0.5",
+            "author": "dnchattan@gmail.com",
+            "commit": "b4988b2867237c8ef0b0334ff2e00c02a4afd9b3",
+            "package": "@remote-ioc/electron-socket"
+          }
+        ]
+      }
+    },
+    {
       "date": "Fri, 21 May 2021 21:37:43 GMT",
       "tag": "@remote-ioc/electron-socket_v1.0.4",
       "version": "1.0.4",

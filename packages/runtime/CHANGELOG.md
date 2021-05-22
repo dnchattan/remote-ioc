@@ -1,8 +1,16 @@
 # Change Log - @remote-ioc/runtime
 
-This log was last generated on Fri, 21 May 2021 21:37:43 GMT and should not be manually modified.
+This log was last generated on Sat, 22 May 2021 21:15:56 GMT and should not be manually modified.
 
 <!-- Start content -->
+
+## 1.0.5
+
+Sat, 22 May 2021 21:15:56 GMT
+
+### Patches
+
+- resolve sockets synchronously if provider is available (dnchattan@gmail.com)
 
 ## 1.0.4
 
