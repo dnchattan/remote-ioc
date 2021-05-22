@@ -2,6 +2,21 @@
   "name": "@remote-ioc/runtime",
   "entries": [
     {
+      "date": "Sat, 22 May 2021 21:21:25 GMT",
+      "tag": "@remote-ioc/runtime_v1.0.6",
+      "version": "1.0.6",
+      "comments": {
+        "patch": [
+          {
+            "comment": "force-bump (stale build)",
+            "author": "dnchattan@gmail.com",
+            "commit": "c9d631f064560a8acd49a314443cd5c708ca9b6b",
+            "package": "@remote-ioc/runtime"
+          }
+        ]
+      }
+    },
+    {
       "date": "Sat, 22 May 2021 21:15:56 GMT",
       "tag": "@remote-ioc/runtime_v1.0.5",
       "version": "1.0.5",

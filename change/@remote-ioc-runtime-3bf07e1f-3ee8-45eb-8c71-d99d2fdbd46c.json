@@ -1,7 +1,0 @@
-{
-  "type": "patch",
-  "comment": "force-bump (stale build)",
-  "packageName": "@remote-ioc/runtime",
-  "email": "dnchattan@gmail.com",
-  "dependentChangeType": "patch"
-}
