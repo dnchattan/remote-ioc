@@ -62,18 +62,27 @@ export class Runtime {
   public getProvider<T>(definition: Constructor<T>): Promisify<T> {
     const { name, metadata } = this.getDefinitionDescriptor(definition);
     const deferredSocket = new DeferredValue<IPCSocket>();
-    const resolveSocket = () => {
+    const tryResolveSocket = () => {
       for (const [, { socket, provides }] of this.socketMap) {
         if (provides.includes(name)) {
-          // eslint-disable-next-line no-await-in-loop
-          deferredSocket.resolve(socket);
-          return;
+          return socket;
         }
       }
-      deferredSocket.reject(new Error(`Provider not found for '${name}'`));
+      return undefined;
+    };
+    const resolveSocket = () => {
+      const socket = tryResolveSocket();
+      if (socket) {
+        deferredSocket.resolve(socket);
+      } else {
+        deferredSocket.reject(new Error(`Provider not found for '${name}'`));
+      }
     };
 
-    if (this.connectionMutex) {
+    const existingSocket = tryResolveSocket();
+    if (existingSocket) {
+      deferredSocket.resolve(existingSocket);
+    } else if (this.connectionMutex) {
       this.connectionMutex
         .wait()
         .then(resolveSocket)
