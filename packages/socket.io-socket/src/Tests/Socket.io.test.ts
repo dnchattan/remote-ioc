@@ -29,7 +29,7 @@ describe('socket.io', () => {
 
   beforeEach(() => {
     server = new Server();
-    server.listen(8080);
+    server.listen(9090);
   });
 
   afterEach(() => {
@@ -79,7 +79,7 @@ describe('socket.io', () => {
       @ApiRuntime(clientRuntime)
       class IForkWorker extends IForkWorkerBase {}
 
-      @ApiSocket(ClientSocket, io('http://localhost:8080', { reconnectionDelay: 0, forceNew: true }))
+      @ApiSocket(ClientSocket, io('http://localhost:9090', { reconnectionDelay: 0, forceNew: true }))
       @ApiRuntime(clientRuntime)
       class ClientInstance {
         @ApiConsumer public static worker: IForkWorker;
