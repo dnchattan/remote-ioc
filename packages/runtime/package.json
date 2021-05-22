@@ -1,6 +1,6 @@
 {
   "name": "@remote-ioc/runtime",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "Remote IOC Runtime implementation",
   "entry": "lib/index.js",
   "main": "lib/index.js",

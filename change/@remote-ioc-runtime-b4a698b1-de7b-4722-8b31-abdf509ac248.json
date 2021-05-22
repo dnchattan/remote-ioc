@@ -1,7 +1,0 @@
-{
-  "type": "patch",
-  "comment": "resolve sockets synchronously if provider is available",
-  "packageName": "@remote-ioc/runtime",
-  "email": "dnchattan@gmail.com",
-  "dependentChangeType": "patch"
-}
