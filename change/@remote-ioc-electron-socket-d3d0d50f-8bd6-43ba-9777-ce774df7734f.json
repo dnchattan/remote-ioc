@@ -1,7 +1,0 @@
-{
-  "type": "patch",
-  "comment": "cache early discovery message in case runtime doesn't attach quickly enough",
-  "packageName": "@remote-ioc/electron-socket",
-  "email": "dnchattan@gmail.com",
-  "dependentChangeType": "patch"
-}

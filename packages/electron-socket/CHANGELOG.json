@@ -2,6 +2,21 @@
   "name": "@remote-ioc/electron-socket",
   "entries": [
     {
+      "date": "Sun, 23 May 2021 21:30:03 GMT",
+      "tag": "@remote-ioc/electron-socket_v1.0.8",
+      "version": "1.0.8",
+      "comments": {
+        "patch": [
+          {
+            "comment": "cache early discovery message in case runtime doesn't attach quickly enough",
+            "author": "dnchattan@gmail.com",
+            "commit": "5dddea61bc93de6dd6f0dbefa7465c5ae02eb9cc",
+            "package": "@remote-ioc/electron-socket"
+          }
+        ]
+      }
+    },
+    {
       "date": "Sun, 23 May 2021 14:13:29 GMT",
       "tag": "@remote-ioc/electron-socket_v1.0.7",
       "version": "1.0.7",

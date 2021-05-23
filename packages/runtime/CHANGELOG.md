@@ -1,8 +1,17 @@
 # Change Log - @remote-ioc/runtime
 
-This log was last generated on Sun, 23 May 2021 14:13:29 GMT and should not be manually modified.
+This log was last generated on Sun, 23 May 2021 21:30:03 GMT and should not be manually modified.
 
 <!-- Start content -->
+
+## 1.0.9
+
+Sun, 23 May 2021 21:30:03 GMT
+
+### Patches
+
+- fix missing functional export (dnchattan@gmail.com)
+- cache early discovery message in case runtime doesn't attach quickly enough (dnchattan@gmail.com)
 
 ## 1.0.7
 
