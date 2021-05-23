@@ -1,8 +1,16 @@
 # Change Log - @remote-ioc/electron-socket
 
-This log was last generated on Sat, 22 May 2021 21:21:25 GMT and should not be manually modified.
+This log was last generated on Sun, 23 May 2021 14:13:29 GMT and should not be manually modified.
 
 <!-- Start content -->
+
+## 1.0.7
+
+Sun, 23 May 2021 14:13:29 GMT
+
+### Patches
+
+- Bump @remote-ioc/runtime to v1.0.7 (dnchattan@gmail.com)
 
 ## 1.0.6
 

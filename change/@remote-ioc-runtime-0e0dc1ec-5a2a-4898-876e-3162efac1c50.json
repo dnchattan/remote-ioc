@@ -1,7 +1,0 @@
-{
-  "type": "patch",
-  "comment": "add functional methods",
-  "packageName": "@remote-ioc/runtime",
-  "email": "dnchattan@gmail.com",
-  "dependentChangeType": "patch"
-}

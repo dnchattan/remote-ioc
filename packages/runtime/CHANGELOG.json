@@ -2,6 +2,21 @@
   "name": "@remote-ioc/runtime",
   "entries": [
     {
+      "date": "Sun, 23 May 2021 14:13:29 GMT",
+      "tag": "@remote-ioc/runtime_v1.0.7",
+      "version": "1.0.7",
+      "comments": {
+        "patch": [
+          {
+            "comment": "add functional methods",
+            "author": "dnchattan@gmail.com",
+            "commit": "d8bf69d2dc908f506bdba975c1c4ed33e84560c9",
+            "package": "@remote-ioc/runtime"
+          }
+        ]
+      }
+    },
+    {
       "date": "Sat, 22 May 2021 21:21:25 GMT",
       "tag": "@remote-ioc/runtime_v1.0.6",
       "version": "1.0.6",
