@@ -36,6 +36,7 @@ interface DiscoverMessage {
 
 export class Runtime {
   private id = v4();
+  private socketSet = new Set<IPCSocket>();
   private socketMap = new Map<SocketId, SocketDescriptor>();
   private definitionMap = new Map<DefinitionName, DefinitionDescriptor>();
   private providerMap = new Map<Constructor, ProviderDescriptor>();
@@ -96,12 +97,23 @@ export class Runtime {
   }
 
   public connect(socket: IPCSocket): void {
+    // socket is already wired
+    if (this.socketSet.has(socket)) {
+      this.sendDiscoverToSocket(socket);
+      return;
+    }
+
+    this.socketSet.add(socket);
     this.outstandingSockets.add(socket);
     if (!this.connectionMutex) {
       this.connectionMutex = new Mutex();
     }
     socket.on('$runtime', 'discover', this.onDiscover.bind(this, socket));
-    socket.on('$runtime', 'connected', this.onConnected.bind(this));
+    socket.on('$runtime', 'connected', this.onConnected.bind(this, socket));
+    this.sendDiscoverToSocket(socket);
+  }
+
+  private sendDiscoverToSocket(socket: IPCSocket) {
     const provides: string[] = [];
     for (const {
       definitionDescriptor: { name, definition },
@@ -117,16 +129,25 @@ export class Runtime {
   }
 
   public close(): void {
-    for (const [, { socket }] of this.socketMap) {
+    for (const socket of this.socketSet) {
       socket.close();
     }
     this.socketMap.clear();
+    this.socketSet.clear();
     this.outstandingSockets.clear();
     this.connectionMutex?.signal();
   }
 
-  private onConnected(child: IPCSocket) {
-    this.connect(child);
+  private onConnected(parent: IPCSocket, child?: IPCSocket) {
+    if (child) {
+      this.connect(child);
+    } else {
+      // delay since connection may be synchronous
+      setTimeout(() => {
+        // child is tunnelling through parent, rebroadcast
+        this.sendDiscoverToSocket(parent);
+      }, 100);
+    }
   }
 
   private onDiscover(socket: IPCSocket, { id, provides }: DiscoverMessage) {
