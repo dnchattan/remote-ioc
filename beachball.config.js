@@ -1,4 +1,5 @@
 module.exports = {
   branch: 'origin/main',
-  access: 'private',
+  access: 'public',
+  bumpDeps: false,
 };
