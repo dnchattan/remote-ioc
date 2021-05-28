@@ -1987,6 +1987,11 @@ commander@^2.7.1:
   resolved "https://registry.yarnpkg.com/commander/-/commander-2.20.3.tgz#fd485e84c03eb4881c20722ba48035e8531aeb33"
   integrity sha512-GpVkmM8vF2vQUkj2LvZmD35JxeJOLCwJ9cUkugyk2nuhbv3+mJvpLYYt+0+USMxE+oj+ey/lJEnhZw75x/OMcQ==
 
+commander@^7.2.0:
+  version "7.2.0"
+  resolved "https://registry.yarnpkg.com/commander/-/commander-7.2.0.tgz#a36cb57d0b501ce108e4d20559a150a391d97ab7"
+  integrity sha512-QrWXB+ZQSVPmIWIhtEO9H+gwHaMGYiF5ChvoJ+K9ZGHG/sVsa6yiesAD1GC/x46sET00Xlwo1u49RVVVzvcSkw==
+
 comment-json@^4.1.0:
   version "4.1.0"
   resolved "https://registry.yarnpkg.com/comment-json/-/comment-json-4.1.0.tgz#09d08f0fbc4ad5eeccbac20f469adbb967dcbd2c"
@@ -3321,6 +3326,15 @@ globby@^11.0.0, globby@^11.0.1:
     ignore "^5.1.4"
     merge2 "^1.3.0"
     slash "^3.0.0"
+
+good-fences@^0.10.0:
+  version "0.10.0"
+  resolved "https://registry.yarnpkg.com/good-fences/-/good-fences-0.10.0.tgz#fb31e2be4a9e8427befb148efe32db8990af9aba"
+  integrity sha512-MeYtRHNKbs37V6/c45aI61YOdDP43ZoihczREdPF+ZcwTXhyorI7OujgtsZYVp81qeBuUt1FxIQ6Z0g9D6qflQ==
+  dependencies:
+    commander "^7.2.0"
+    minimatch "^3.0.4"
+    typescript "^4.0.3"
 
 got@^9.6.0:
   version "9.6.0"
@@ -6758,6 +6772,11 @@ typedarray@^0.0.6:
   version "0.0.6"
   resolved "https://registry.yarnpkg.com/typedarray/-/typedarray-0.0.6.tgz#867ac74e3864187b1d3d47d996a78ec5c8830777"
   integrity sha1-hnrHTjhkGHsdPUfZlqeOxciDB3c=
+
+typescript@^4.0.3:
+  version "4.3.2"
+  resolved "https://registry.yarnpkg.com/typescript/-/typescript-4.3.2.tgz#399ab18aac45802d6f2498de5054fcbbe716a805"
+  integrity sha512-zZ4hShnmnoVnAHpVHWpTcxdv7dWP60S2FsydQLV8V5PbS3FifjWFFRiHSWpDJahly88PRyV5teTSLoq4eG7mKw==
 
 typescript@^4.1.5:
   version "4.2.4"

@@ -1,0 +1,9 @@
+{
+  "dependencies": [],
+  "tags": [
+    "interfaces"
+  ],
+  "exports": [
+    "index"
+  ]
+}

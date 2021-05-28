@@ -1,0 +1,6 @@
+{
+  "dependencies": [
+    "uuid",
+    "reflect-metadata"
+  ]
+}
