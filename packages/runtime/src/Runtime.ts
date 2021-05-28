@@ -4,9 +4,6 @@ import { IRuntime } from './Interfaces';
 import { Constructor } from './Types';
 
 export class Runtime implements IRuntime {
-  registerDefinition(Definition: Constructor<unknown>): this {
-    throw new Error('Method not implemented.');
-  }
   registerProvider<D extends Constructor<unknown>, P extends D>(Provider: P, Definition: D): this {
     throw new Error('Method not implemented.');
   }
