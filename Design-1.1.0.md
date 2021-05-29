@@ -51,7 +51,7 @@ import { useApi, LocalRouter } from '@remote-ioc/runtime';
 async function app() {
   const greeter = useApi(IGreeter); // IGreeter
   const message = await greeter.greet('world');
-  conole.log(message); // Hello, world!
+  console.log(message); // Hello, world!
 }
 
 useRouter(LocalRouter, { mode: 'client' });

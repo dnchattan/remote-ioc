@@ -11,7 +11,7 @@ export interface IRuntime {
   /**
    * Registers a provider for a given definition
    */
-  registerProvider<D extends Constructor, P extends D>(Provider: P, Definition: D): this;
+  registerProvider<D extends Constructor, P extends D>(Provider: P): this;
 
   /**
    * Gets a provider singleton for a given definition

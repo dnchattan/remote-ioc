@@ -21,7 +21,7 @@ export interface IRouter {
   /**
    * Gets a socket for the provided Definition
    */
-  // getSocket(Definition: Constructor): ISocket;
+  getSocket(Definition: Constructor): ISocket;
 }
 
 export interface IRouterConstructor {

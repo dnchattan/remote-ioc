@@ -18,7 +18,7 @@ describe('@ApiProvider', () => {
       @ApiProvider(Definition)
       class Provider {}
       expect(ApiProvider.implementationsOf(Provider)).toEqual([Definition]);
-      expect(runtime.registerProvider).toBeCalledWith(Provider, Definition);
+      expect(runtime.registerProvider).toBeCalledWith(Provider);
     });
   });
   it('multiple decorators', () => {
@@ -32,8 +32,8 @@ describe('@ApiProvider', () => {
       @ApiProvider(Definition2)
       class Provider {}
       expect(ApiProvider.implementationsOf(Provider)).toEqual([Definition2, Definition1]);
-      expect(runtime.registerProvider).toHaveBeenNthCalledWith(1, Provider, Definition2);
-      expect(runtime.registerProvider).toHaveBeenNthCalledWith(2, Provider, Definition1);
+      expect(runtime.registerProvider).toHaveBeenNthCalledWith(1, Provider);
+      expect(runtime.registerProvider).toHaveBeenNthCalledWith(2, Provider);
     });
   });
 });

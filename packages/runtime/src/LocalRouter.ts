@@ -17,4 +17,10 @@ export class LocalRouter implements IRouter {
     const socket = this.loopback.createSocket(scope);
     return socket;
   }
+
+  getSocket(Definition: Constructor): ISocket {
+    const scope = ApiDefinition.nameOf(Definition);
+    const socket = this.loopback.createSocket(scope);
+    return socket;
+  }
 }

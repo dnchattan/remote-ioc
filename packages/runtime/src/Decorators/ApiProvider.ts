@@ -7,7 +7,7 @@ const ApiProviderDefinition = Symbol('api:provider:definition');
 function ApiProviderDecorator<T extends Constructor>(definition: T) {
   return <U extends T>(target: U): U => {
     const runtime = getRuntime();
-    runtime.registerProvider(target, definition);
+    runtime.registerProvider(target);
     const definitions = Reflect.getMetadata(ApiProviderDefinition, target) || [];
     Reflect.defineMetadata(ApiProviderDefinition, [...definitions, definition], target);
     return target;
