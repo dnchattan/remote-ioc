@@ -16,8 +16,8 @@
         "${workspaceFolder}/scripts/jest-debug-setup.js",
         "--config",
         "${workspaceFolder}/jest.config.js",
-        "--testNamePattern",
-        "ProxyBuilder"
+        // "--testNamePattern",
+        // "documentation sample"
       ],
       "sourceMaps": true,
       "skipFiles": [

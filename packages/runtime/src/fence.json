@@ -1,6 +1,6 @@
 {
   "dependencies": [
-    "uuid",
+    "nanoid",
     "reflect-metadata"
   ]
 }

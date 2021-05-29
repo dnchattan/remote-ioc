@@ -1,11 +1,11 @@
 import type { Serializable } from 'child_process';
-import { v4 } from 'uuid';
+import { nanoid } from 'nanoid';
 
 type PromiseCallbacks = { resolve: (value: Serializable) => void; reject: (error: Serializable) => void };
 
 export class PromiseStore {
   private promiseIdx = 0;
-  private salt = v4();
+  private salt = nanoid(10);
   private readonly promises = new Map<string, PromiseCallbacks>();
   private nextPromiseId(): string {
     return `${this.salt}${this.promiseIdx++}`;

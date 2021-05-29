@@ -4,7 +4,7 @@ import { ApiProvider } from '../Decorators/ApiProvider';
 import { useApi, useRouter } from '../FunctionalApi';
 import { LocalRouter } from '../LocalRouter';
 import { Runtime } from '../Runtime';
-import { useRuntime } from '../RuntimeContext';
+import { getRuntime, useRuntime } from '../RuntimeContext';
 
 class IGreeterDefinition {
   greet(name: string): Promise<string> {
@@ -14,6 +14,7 @@ class IGreeterDefinition {
 
 describe('sample', () => {
   it('documentation sample', async () => {
+    const router = new LocalRouter();
     const logResult = jest.fn();
     function importDefinition() {
       return { IGreeter: ApiDefinition('greeter')(IGreeterDefinition) };
@@ -28,12 +29,12 @@ describe('sample', () => {
           return `Hello, ${name}`;
         }
       }
-
-      useRouter(LocalRouter);
+      getRuntime().useRouter(router);
     }
     function importApp() {
       async function app() {
         const { IGreeter } = importDefinition();
+        getRuntime().useRouter(router);
         const greeter = useApi(IGreeter);
         const message = await greeter.greet('world');
         logResult(message);

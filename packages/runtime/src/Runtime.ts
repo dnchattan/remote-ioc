@@ -2,7 +2,6 @@
 /* eslint-disable class-methods-use-this */
 import { AvailabilityMap, DefaultedMap } from './Helpers';
 import { IRouter, IRuntime } from './Interfaces';
-import { ProviderProxy } from './ProviderProxy';
 import { buildProxyFor } from './ProxyBuilder';
 import { Constructor } from './Types';
 
@@ -22,6 +21,7 @@ export class Runtime implements IRuntime {
     buildProxyFor(Definition, this.request(Definition))
   );
   private definitionAvailability = new AvailabilityMap<Constructor, IRouter>();
+  private providers = new Set<Constructor>();
 
   constructor() {
     this.definitionAvailability.on('request', this.onFirstRequest);
@@ -43,10 +43,14 @@ export class Runtime implements IRuntime {
 
   useRouter(router: IRouter): this {
     this.routers.add(router);
+    for (const provider of this.providers) {
+      router.registerProvider(provider);
+    }
     return this;
   }
 
   registerProvider<P extends Constructor<unknown>>(Provider: P): this {
+    this.providers.add(Provider);
     for (const router of this.routers) {
       router.registerProvider(Provider);
     }

@@ -9,8 +9,9 @@ export class LocalRouter implements IRouter {
   private providers = new Set<Constructor>();
 
   async queryDefinition(Definition: Constructor): Promise<boolean> {
+    const defName = ApiDefinition.nameOf(Definition);
     for (const provider of this.providers) {
-      if (ApiProvider.implementationsOf(provider).includes(Definition)) {
+      if (ApiProvider.implementationsOf(provider).some((definition) => ApiDefinition.nameOf(definition) === defName)) {
         return true;
       }
     }
