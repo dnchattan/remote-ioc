@@ -1,6 +1,13 @@
-import { Constructor } from '../Types';
+import type { Constructor } from '../Types';
+import type { IRouter } from './IRouter';
 
 export interface IRuntime {
+  /**
+   * Adds a router to this runtime's context
+   * @param router
+   */
+  useRouter(router: IRouter): this;
+
   /**
    * Registers a provider for a given definition
    */

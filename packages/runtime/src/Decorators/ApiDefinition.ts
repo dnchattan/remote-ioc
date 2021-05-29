@@ -41,11 +41,11 @@ function ApiDefinitionDecorator(name: string) {
 
 export interface IApiDefinitionDecorator {
   (name: string): <T extends Constructor>(target: ApiDefinitionTarget<T>) => T;
-  nameOf<T extends Constructor>(target: ApiDefinitionTarget<T>): string;
+  nameOf<T extends Constructor>(target: T): string;
 }
 
 export const ApiDefinition: IApiDefinitionDecorator = Object.assign(ApiDefinitionDecorator, {
-  nameOf<T extends Constructor>(target: ApiDefinitionTarget<T>): string {
+  nameOf<T extends Constructor>(target: T): string {
     const name = Reflect.getMetadata(ApiDefinitionName, target);
     if (name === undefined) {
       throw new Error(`Target class '${target.name}' is not marked with @ApiDefinition`);

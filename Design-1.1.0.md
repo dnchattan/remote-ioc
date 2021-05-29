@@ -39,7 +39,7 @@ class Greeter implements IGreeter {
   }
 }
 
-useRouter(LocalRouter);
+useRouter(LocalRouter, { mode: 'server' });
 ```
 
 ### Api Consumer
@@ -54,7 +54,7 @@ async function app() {
   conole.log(message); // Hello, world!
 }
 
-useRouter(LocalRouter);
+useRouter(LocalRouter, { mode: 'client' });
 
 app();
 ```
