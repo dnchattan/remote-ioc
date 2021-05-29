@@ -30,7 +30,7 @@ export function buildProxyFor<D extends Constructor>(Definition: D, deferredRout
         try {
           const socket = await deferredSocket;
           const [promiseId, result] = promises.create();
-          socket.send(definitionName, 'get', promiseId, key);
+          socket.send('get', promiseId, key);
           return await result;
         } catch (e) {
           return Promise.reject(e);
@@ -45,7 +45,7 @@ export function buildProxyFor<D extends Constructor>(Definition: D, deferredRout
         try {
           const socket = await deferredSocket;
           const [promiseId, result] = promises.create();
-          socket.send(definitionName, 'call', promiseId, methodName, ...args);
+          socket.send('call', promiseId, methodName, ...args);
           return await result;
         } catch (e) {
           return Promise.reject(e);

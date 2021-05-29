@@ -4,7 +4,7 @@ import { ApiProvider } from '../Decorators/ApiProvider';
 import { useApi, useRouter } from '../FunctionalApi';
 import { LocalRouter } from '../LocalRouter';
 import { Runtime } from '../Runtime';
-import { getRuntime, useRuntime } from '../RuntimeContext';
+import { useRuntime } from '../RuntimeContext';
 
 class IGreeterDefinition {
   greet(name: string): Promise<string> {
@@ -16,7 +16,6 @@ describe('sample', () => {
   it('documentation sample', async () => {
     // TODO: This is a bit of a hack, testing with a shared LocalRouter which is not intended for this scenario.
     // This should ideally be changed to connect betweeen two router instances
-    const router = new LocalRouter();
     const logResult = jest.fn();
     function importDefinition() {
       return { IGreeter: ApiDefinition('greeter')(IGreeterDefinition) };
@@ -31,12 +30,12 @@ describe('sample', () => {
           return `Hello, ${name}`;
         }
       }
-      getRuntime().useRouter(router);
+      useRouter(LocalRouter, 'provider');
     }
     function importApp() {
       async function app() {
         const { IGreeter } = importDefinition();
-        getRuntime().useRouter(router);
+        useRouter(LocalRouter, 'consumer');
         const greeter = useApi(IGreeter);
         const message = await greeter.greet('world');
         logResult(message);
@@ -47,6 +46,6 @@ describe('sample', () => {
     useRuntime(new Runtime(), importProvider);
     const { app } = useRuntime(new Runtime(), importApp);
     await app();
-    expect(logResult).toHaveBeenCalledWith('Hello, world!');
+    expect(logResult).toHaveBeenCalledWith('Hello, world');
   });
 });

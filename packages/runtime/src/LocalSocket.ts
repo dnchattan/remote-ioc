@@ -3,7 +3,6 @@ import { ISocket } from './Interfaces';
 
 export class LocalServerSocket implements ISocket {
   private handlers = new DefaultedMap<string, ((...args: any[]) => void)[]>(() => []);
-
   // eslint-disable-next-line class-methods-use-this
   close(): void {
     // no-op

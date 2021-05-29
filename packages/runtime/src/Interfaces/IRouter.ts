@@ -19,15 +19,12 @@ export interface IRouter {
   queryDefinition(Definition: Constructor): Promise<boolean>;
 
   /**
-   * Gets a socket to serve a provider for the given definition
-   * @param Definition
-   */
-  getServer(Definition: Constructor): ISocket;
-
-  /**
    * Gets a socket for the provided Definition
    */
   getSocket(Definition: Constructor): ISocket;
+
+  on(event: 'discover', handler: (Definitions: Constructor[]) => void): this;
+  off(event: 'discover', handler: (Definitions: Constructor[]) => void): this;
 }
 
 export interface IRouterConstructor {

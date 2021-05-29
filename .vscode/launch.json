@@ -16,8 +16,8 @@
         "${workspaceFolder}/scripts/jest-debug-setup.js",
         "--config",
         "${workspaceFolder}/jest.config.js",
-        // "--testNamePattern",
-        // "documentation sample"
+        "--testNamePattern",
+        "documentation sample"
       ],
       "sourceMaps": true,
       "skipFiles": [
@@ -26,7 +26,7 @@
       ],
       // "preLaunchTask": "yarn: tsc",
       "autoAttachChildProcesses": true,
-      "console": "integratedTerminal",
+      "console": "internalConsole",
       "internalConsoleOptions": "neverOpen"
     }
   ]

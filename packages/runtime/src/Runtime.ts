@@ -1,7 +1,8 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable class-methods-use-this */
 import { AvailabilityMap, DefaultedMap } from './Helpers';
-import { IRouter, IRuntime } from './Interfaces';
+import { IRouter, IRuntime, ISocket } from './Interfaces';
+import { ProviderServer } from './ProviderServer';
 import { buildProxyFor } from './ProxyBuilder';
 import { Constructor } from './Types';
 
@@ -32,19 +33,26 @@ export class Runtime implements IRuntime {
     await Promise.all(fanout);
   };
 
+  private onDiscover = (router: IRouter, definitions: Constructor[]) => {
+    for (const Definition of definitions) {
+      this.definitionAvailability.resolve(Definition, router);
+    }
+  };
+
   request<D extends Constructor>(Definition: D): Promise<IRouter> {
     return this.definitionAvailability.request(Definition);
   }
 
   useRouter(router: IRouter): this {
     this.routers.add(router);
+    router.on('discover', this.onDiscover.bind(this, router));
     for (const provider of this.providers) {
       router.registerProvider(provider);
     }
     return this;
   }
 
-  registerProvider<P extends Constructor<unknown>>(Provider: P): this {
+  registerProvider<P extends Constructor>(Provider: P): this {
     this.providers.add(Provider);
     for (const router of this.routers) {
       router.registerProvider(Provider);
@@ -52,7 +60,7 @@ export class Runtime implements IRuntime {
     return this;
   }
 
-  getProvider<T extends Constructor<unknown>>(Definition: T): InstanceType<T> {
+  getProvider<T extends Constructor>(Definition: T): InstanceType<T> {
     const ProxyClass = this.definitionProxyMap.get(Definition);
     return new ProxyClass() as InstanceType<T>;
   }

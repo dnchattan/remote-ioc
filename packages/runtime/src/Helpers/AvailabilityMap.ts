@@ -1,22 +1,28 @@
 import { EventEmitter } from 'events';
+import { ApiDefinition } from '../Decorators';
+import { Constructor } from '../Types';
 import { DefaultedMap } from './DefaultedMap';
 import { PromiseSink } from './PromiseSink';
 
-export class AvailabilityMap<K, V> extends EventEmitter {
-  private requests: DefaultedMap<K, PromiseSink<V>> = new DefaultedMap((key) => {
-    this.emit('request', key);
-    return new PromiseSink();
-  });
+// TODO: Move this out of helpers, since it's not fully generic anymore
+export class AvailabilityMap<K extends Constructor, V> extends EventEmitter {
+  private requests: DefaultedMap<string, PromiseSink<V>> = new DefaultedMap(() => new PromiseSink());
 
   request(key: K): Promise<V> {
-    return this.requests.get(key).getValue();
+    const name = ApiDefinition.nameOf(key);
+    if (!this.requests.has(name)) {
+      this.emit('request', key);
+    }
+    return this.requests.get(name).getValue();
   }
 
   resolve(key: K, value: V): void {
-    this.requests.get(key).setValue(value);
+    const name = ApiDefinition.nameOf(key);
+    this.requests.get(name).setValue(value);
   }
 
   reject(key: K, error: Error): void {
-    this.requests.get(key).setValue(error);
+    const name = ApiDefinition.nameOf(key);
+    this.requests.get(name).setValue(error);
   }
 }

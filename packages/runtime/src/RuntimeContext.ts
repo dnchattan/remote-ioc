@@ -1,5 +1,18 @@
 import { IRuntime } from './Interfaces';
+import { Loopback } from './Loopback';
 import { Runtime } from './Runtime';
+
+let loopback: Loopback | undefined;
+
+export function getLoopback(): Loopback | undefined {
+  if (process.env.DISABLE_LOOPBACK === '1') {
+    return undefined;
+  }
+  if (!loopback) {
+    loopback = new Loopback();
+  }
+  return loopback;
+}
 
 let rootRuntime: IRuntime | undefined;
 let currentRuntime: IRuntime;

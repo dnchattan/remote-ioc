@@ -1,4 +1,5 @@
 /* eslint-disable max-classes-per-file */
+import { EventEmitter } from 'events';
 import { ApiDefinition, methodStub } from './Decorators';
 import { useRouter } from './FunctionalApi';
 import { IRouter, ISocket } from './Interfaces';
@@ -13,10 +14,12 @@ describe('ProxyBuilder', () => {
     send = jest.fn();
   }
 
-  class MockRouter implements IRouter {
+  class MockRouter extends EventEmitter implements IRouter {
     constructor();
     constructor(socket?: ISocket);
-    constructor(private readonly socket: ISocket = new MockSocket()) {}
+    constructor(private readonly socket: ISocket = new MockSocket()) {
+      super();
+    }
     getServer = jest.fn(() => this.socket);
     getSocket = jest.fn(() => this.socket);
     queryDefinition = jest.fn();
@@ -44,14 +47,14 @@ describe('ProxyBuilder', () => {
     const socket = new MockSocket();
     const router = useRouter(MockRouter, socket);
     router.queryDefinition.mockResolvedValue(true);
-    socket.send.mockImplementationOnce((_scope: string, _channel: string, promiseId: string) => {
+    socket.send.mockImplementationOnce((_channel: string, promiseId: string) => {
       const handler = socket.on.mock.calls[0][1];
       handler(promiseId, true, 'bar');
     });
     const ProxyClass = buildProxyFor(Definition, Promise.resolve(router));
     const proxy = new ProxyClass();
     await expect(proxy.method('foo')).resolves.toEqual('bar');
-    expect(socket.send).toBeCalledWith('my-api', 'call', expect.any(String), 'method', 'foo');
+    expect(socket.send).toBeCalledWith('call', expect.any(String), 'method', 'foo');
     expect(router.getSocket).toBeCalledWith(Definition);
   });
 
@@ -65,14 +68,14 @@ describe('ProxyBuilder', () => {
     const socket = new MockSocket();
     const router = useRouter(MockRouter, socket);
     router.queryDefinition.mockResolvedValue(true);
-    socket.send.mockImplementationOnce((_scope: string, _channel: string, promiseId: string) => {
+    socket.send.mockImplementationOnce((_channel: string, promiseId: string) => {
       const handler = socket.on.mock.calls[0][1];
       handler(promiseId, false, new Error('bar'));
     });
     const ProxyClass = buildProxyFor(Definition, Promise.resolve(router));
     const proxy = new ProxyClass();
     await expect(proxy.method('foo')).rejects.toThrowError(new Error('bar'));
-    expect(socket.send).toBeCalledWith('my-api', 'call', expect.any(String), 'method', 'foo');
+    expect(socket.send).toBeCalledWith('call', expect.any(String), 'method', 'foo');
     expect(router.getSocket).toBeCalledWith(Definition);
   });
 
@@ -86,14 +89,14 @@ describe('ProxyBuilder', () => {
     const socket = new MockSocket();
     const router = useRouter(MockRouter, socket);
     router.queryDefinition.mockResolvedValue(true);
-    socket.send.mockImplementationOnce((_scope: string, _channel: string, promiseId: string) => {
+    socket.send.mockImplementationOnce((_channel: string, promiseId: string) => {
       const handler = socket.on.mock.calls[0][1];
       handler(promiseId, true, 'bar');
     });
     const ProxyClass = buildProxyFor(Definition, Promise.resolve(router));
     const proxy = new ProxyClass();
     await expect(proxy.property).resolves.toEqual('bar');
-    expect(socket.send).toBeCalledWith('my-api', 'get', expect.any(String), 'property');
+    expect(socket.send).toBeCalledWith('get', expect.any(String), 'property');
     expect(router.getSocket).toBeCalledWith(Definition);
   });
 
@@ -118,14 +121,14 @@ describe('ProxyBuilder', () => {
     const socket = new MockSocket();
     const router = useRouter(MockRouter, socket);
     router.queryDefinition.mockResolvedValue(true);
-    socket.send.mockImplementationOnce((_scope: string, _channel: string, promiseId: string) => {
+    socket.send.mockImplementationOnce((_channel: string, promiseId: string) => {
       const handler = socket.on.mock.calls[0][1];
       handler(promiseId, false, new Error('bar'));
     });
     const ProxyClass = buildProxyFor(Definition, Promise.resolve(router));
     const proxy = new ProxyClass();
     await expect(proxy.property).rejects.toThrowError(new Error('bar'));
-    expect(socket.send).toBeCalledWith('my-api', 'get', expect.any(String), 'property');
+    expect(socket.send).toBeCalledWith('get', expect.any(String), 'property');
     expect(router.getSocket).toBeCalledWith(Definition);
   });
 });
