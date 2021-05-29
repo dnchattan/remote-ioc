@@ -11,11 +11,6 @@ import { Constructor } from './Types';
  */
 
 export class Runtime implements IRuntime {
-  // TODO:
-  // track what definitions have been requested, and which are available.
-  // on request, a router could synchronously resolve (e.g. Named Pipes)
-  // or it could queue a discovery flow, and listen to updates as new
-  // definition providers are emitted from their sockets
   private routers = new Set<IRouter>();
   private definitionProxyMap = new DefaultedMap<Constructor, Constructor>((Definition) =>
     buildProxyFor(Definition, this.request(Definition))

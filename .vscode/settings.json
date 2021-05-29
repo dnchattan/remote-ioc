@@ -23,5 +23,8 @@
         "**/CVS": true,
         "**/.DS_Store": true,
     },
-    "editor.tabSize": 2
+    "editor.tabSize": 2,
+    "todo-tree.filtering.excludeGlobs": [
+        "**/node_modules/**"
+    ]
 }
