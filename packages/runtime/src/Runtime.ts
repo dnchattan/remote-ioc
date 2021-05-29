@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable class-methods-use-this */
+import { ApiDefinition } from './Decorators';
 import { AvailabilityMap, DefaultedMap } from './Helpers';
 import { IRouter, IRuntime, ISocket } from './Interfaces';
 import { ProviderServer } from './ProviderServer';
@@ -12,6 +13,7 @@ import { Constructor } from './Types';
  */
 
 export class Runtime implements IRuntime {
+  private definitions = new Map<string, Constructor>();
   private routers = new Set<IRouter>();
   private definitionProxyMap = new DefaultedMap<Constructor, Constructor>((Definition) =>
     buildProxyFor(Definition, this.request(Definition))
@@ -38,6 +40,11 @@ export class Runtime implements IRuntime {
       this.definitionAvailability.resolve(Definition, router);
     }
   };
+
+  registerDefinition<D extends Constructor>(Definition: D): this {
+    this.definitions.set(ApiDefinition.nameOf(Definition), Definition);
+    return this;
+  }
 
   request<D extends Constructor>(Definition: D): Promise<IRouter> {
     return this.definitionAvailability.request(Definition);

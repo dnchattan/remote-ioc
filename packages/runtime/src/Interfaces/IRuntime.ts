@@ -9,6 +9,12 @@ export interface IRuntime {
   useRouter(router: IRouter): this;
 
   /**
+   * Registers a definition
+   * @param Definition
+   */
+  registerDefinition<D extends Constructor>(Definition: D): this;
+
+  /**
    * Registers a provider for a given definition
    */
   registerProvider<D extends Constructor, P extends D>(Provider: P): this;

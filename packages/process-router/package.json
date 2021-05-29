@@ -1,7 +1,7 @@
 {
-  "name": "@remote-ioc/process-socket",
+  "name": "@remote-ioc/process-router",
   "version": "1.0.8",
-  "description": "Remote Process Socket for @remote-ioc",
+  "description": "Remote Process Router for @remote-ioc",
   "main": "lib/index.js",
   "author": "dnchattan@gmail.com",
   "license": "MIT",
