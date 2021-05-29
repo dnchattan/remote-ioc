@@ -1,4 +1,6 @@
 import 'reflect-metadata';
+// eslint-disable-next-line import/no-cycle
+import { getRuntime } from '../RuntimeContext';
 import type { Constructor, Promisify, StaticError } from '../Types';
 
 export type ApiDefinitionError<T> = StaticError<'TypeError: all type members be async', T>;
@@ -35,6 +37,7 @@ function ApiDefinitionDecorator(name: string) {
     }
 
     Reflect.defineMetadata(ApiDefinitionName, name, wrapper);
+    getRuntime().registerDefinition(wrapper);
     return wrapper as any;
   };
 }

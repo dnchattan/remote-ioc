@@ -11,7 +11,12 @@ describe('@ApiProvider', () => {
     );
   });
   it('decorated class', () => {
-    const runtime = { registerProvider: jest.fn(), getProvider: jest.fn(), useRouter: jest.fn() };
+    const runtime = {
+      registerDefinition: jest.fn(),
+      registerProvider: jest.fn(),
+      getProvider: jest.fn(),
+      useRouter: jest.fn(),
+    };
     useRuntime(runtime, () => {
       @ApiDefinition('my-api')
       class Definition {}
@@ -22,7 +27,12 @@ describe('@ApiProvider', () => {
     });
   });
   it('multiple decorators', () => {
-    const runtime = { registerProvider: jest.fn(), getProvider: jest.fn(), useRouter: jest.fn() };
+    const runtime = {
+      registerDefinition: jest.fn(),
+      registerProvider: jest.fn(),
+      getProvider: jest.fn(),
+      useRouter: jest.fn(),
+    };
     useRuntime(runtime, () => {
       @ApiDefinition('my-api-1')
       class Definition1 {}

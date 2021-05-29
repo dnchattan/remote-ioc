@@ -1,6 +1,5 @@
 import { EventEmitter } from 'events';
-import { ApiDefinition } from './Decorators';
-import { ApiProvider } from './Decorators/ApiProvider';
+import { ApiDefinition, ApiProvider } from './Decorators';
 import { DefaultedMap } from './Helpers';
 import { IRouter, ISocket } from './Interfaces';
 import { Loopback } from './Loopback';
@@ -33,7 +32,10 @@ export class LocalRouter extends EventEmitter implements IRouter {
   };
 
   private onDiscoverResponse = (definitions: Constructor[]) => {
-    this.emit('discover', definitions);
+    this.emit(
+      'discover',
+      definitions.map((def) => ApiDefinition.nameOf(def))
+    );
   };
 
   private createServer<D extends Constructor, P extends D>(Definition: D, Provider: P): this {

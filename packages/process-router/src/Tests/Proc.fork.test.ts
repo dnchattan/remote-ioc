@@ -1,7 +1,7 @@
-import { ApiConsumer, ApiSocket } from '@remote-ioc/runtime';
+import { useApi, useRouter } from '@remote-ioc/runtime';
 import { fork, ChildProcess } from 'child_process';
 import path from 'path';
-import { ProcessSocket } from '../ProcessSocket';
+import { ProcessRouter } from '../ProcessSocket';
 import { IForkWorker } from './Proc.fork.definitions';
 
 export async function sleep(ms: number): Promise<void> {
@@ -27,11 +27,8 @@ describe('process.fork', () => {
   });
 
   it('method(void): Promise<string>', async () => {
-    @ApiSocket(() => new ProcessSocket(childProcess))
-    class LocalRuntime {
-      @ApiConsumer public static worker: IForkWorker;
-    }
-    expect(await LocalRuntime.worker.method()).toEqual('async-return');
+    useRouter(ProcessRouter, childProcess);
+    expect(await useApi(IForkWorker).method()).toEqual('async-return');
   });
 
   // it('method(...number): Promise<string>', async () => {

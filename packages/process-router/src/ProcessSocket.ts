@@ -1,8 +1,15 @@
 /* eslint-disable max-classes-per-file */
 import { EventEmitter } from 'events';
 import type { ChildProcess, Serializable } from 'child_process';
-import { ApiDefinition, Constructor, DefaultedMap, IRouter, ISocket, ProviderServer } from '@remote-ioc/runtime';
-import { ApiProvider } from '@remote-ioc/runtime/src/Decorators/ApiProvider';
+import {
+  ApiDefinition,
+  Constructor,
+  DefaultedMap,
+  IRouter,
+  ISocket,
+  ProviderServer,
+  ApiProvider,
+} from '@remote-ioc/runtime';
 
 class ProcessSocket implements ISocket {
   constructor(private readonly scope: string, private readonly ipc: ChildProcess | NodeJS.Process) {
@@ -49,7 +56,7 @@ export class ProcessRouter extends EventEmitter implements IRouter {
     }
     this.ipc.on('message', this.handleProcessMessage);
     setTimeout(() => {
-      this.ipc.send!(['$local-router', 'discover/request']);
+      this.ipc.send!(['$process-router', 'discover/request']);
     }, 5);
   }
 
@@ -85,7 +92,11 @@ export class ProcessRouter extends EventEmitter implements IRouter {
     return new ProcessSocket(ApiDefinition.nameOf(Definition), this.ipc);
   }
 
-  private handleProcessMessage = (scope: string, channel: string, ...args: Serializable[]) => {
+  private handleProcessMessage = ([scope, channel, ...args]: [
+    scope: string,
+    channel: string,
+    ...args: Serializable[]
+  ]) => {
     if (scope !== '$process-router') {
       return;
     }
@@ -107,7 +118,7 @@ export class ProcessRouter extends EventEmitter implements IRouter {
     for (const provider of this.providers) {
       definitions.push(...ApiProvider.implementationsOf(provider).map((def) => ApiDefinition.nameOf(def)));
     }
-    this.ipc.send!(['$local-router', 'discover/response', definitions]);
+    this.ipc.send!(['$process-router', 'discover/response', definitions]);
   }
 
   private handleDiscoverResponse(definitions: string[]) {

@@ -1,7 +1,7 @@
 /* eslint-disable max-classes-per-file */
 /* eslint-disable class-methods-use-this */
-import { ApiProvider, ApiSocket } from '@remote-ioc/runtime';
-import { ProcessSocket } from '../ProcessSocket';
+import { ApiProvider, useRouter } from '@remote-ioc/runtime';
+import { ProcessRouter } from '../ProcessSocket';
 import { IForkWorker } from './Proc.fork.definitions';
 
 @ApiProvider(IForkWorker)
@@ -19,5 +19,4 @@ export class ForkWorker implements IForkWorker {
   }
 }
 
-@ApiSocket(() => new ProcessSocket(process))
-export class RemoteRuntime {}
+useRouter(ProcessRouter, process);

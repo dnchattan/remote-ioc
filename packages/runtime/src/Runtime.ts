@@ -2,8 +2,7 @@
 /* eslint-disable class-methods-use-this */
 import { ApiDefinition } from './Decorators';
 import { AvailabilityMap, DefaultedMap } from './Helpers';
-import { IRouter, IRuntime, ISocket } from './Interfaces';
-import { ProviderServer } from './ProviderServer';
+import { IRouter, IRuntime } from './Interfaces';
 import { buildProxyFor } from './ProxyBuilder';
 import { Constructor } from './Types';
 
@@ -35,8 +34,12 @@ export class Runtime implements IRuntime {
     await Promise.all(fanout);
   };
 
-  private onDiscover = (router: IRouter, definitions: Constructor[]) => {
-    for (const Definition of definitions) {
+  private onDiscover = (router: IRouter, definitions: string[]) => {
+    for (const defName of definitions) {
+      const Definition = this.definitions.get(defName);
+      if (!Definition) {
+        continue;
+      }
       this.definitionAvailability.resolve(Definition, router);
     }
   };

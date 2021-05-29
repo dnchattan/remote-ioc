@@ -23,8 +23,8 @@ export interface IRouter {
    */
   getSocket(Definition: Constructor): ISocket;
 
-  on(event: 'discover', handler: (Definitions: Constructor[]) => void): this;
-  off(event: 'discover', handler: (Definitions: Constructor[]) => void): this;
+  on(event: 'discover', handler: (Definitions: string[]) => void): this;
+  off(event: 'discover', handler: (Definitions: string[]) => void): this;
 }
 
 export interface IRouterConstructor {
