@@ -14,6 +14,8 @@ class IGreeterDefinition {
 
 describe('sample', () => {
   it('documentation sample', async () => {
+    // TODO: This is a bit of a hack, testing with a shared LocalRouter which is not intended for this scenario.
+    // This should ideally be changed to connect betweeen two router instances
     const router = new LocalRouter();
     const logResult = jest.fn();
     function importDefinition() {

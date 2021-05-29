@@ -8,7 +8,7 @@ export class PromiseStore {
   private salt = nanoid(10);
   private readonly promises = new Map<string, PromiseCallbacks>();
   private nextPromiseId(): string {
-    return `${this.salt}${this.promiseIdx++}`;
+    return `${this.salt}|${this.promiseIdx++}`;
   }
 
   // TODO Add a timeout value and automatically expire stale promises
