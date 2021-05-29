@@ -17,14 +17,14 @@
         "--config",
         "${workspaceFolder}/jest.config.js",
         "--testNamePattern",
-        "socket.io"
+        "ProxyBuilder"
       ],
       "sourceMaps": true,
       "skipFiles": [
         "<node_internals>/**",
         "node_modules/**"
       ],
-      "preLaunchTask": "yarn: tsc",
+      // "preLaunchTask": "yarn: tsc",
       "autoAttachChildProcesses": true,
       "console": "integratedTerminal",
       "internalConsoleOptions": "neverOpen"
