@@ -1,10 +1,9 @@
+/* eslint-disable global-require */
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable class-methods-use-this */
 /* eslint-disable max-classes-per-file */
-import { ApiConsumer, ApiDefinition, ApiProvider, ApiRuntime, ApiSocket, Runtime } from '@remote-ioc/runtime';
+import { Runtime, useRuntime } from '@remote-ioc/runtime';
 import { Server } from 'socket.io';
-import { io } from 'socket.io-client';
-import { ClientSocket } from '../ClientSocket';
-import { ServerSocket } from '../ServerSocket';
 
 export async function sleep(ms: number): Promise<void> {
   return new Promise<void>((resolve) => setTimeout(resolve, ms));
@@ -25,7 +24,6 @@ export class IForkWorkerBase {
 
 describe('socket.io', () => {
   let server: Server;
-  const runtimes: Set<Runtime> = new Set();
 
   beforeEach(() => {
     server = new Server();
@@ -33,27 +31,21 @@ describe('socket.io', () => {
   });
 
   afterEach(() => {
-    server.close();
     server.disconnectSockets();
-    for (const runtime of runtimes.values()) {
-      runtime.close();
-    }
-    runtimes.clear();
+    server.close();
+    jest.resetModules();
   });
 
   it('method(void): Promise<string>', async () => {
-    {
-      const serverRuntime = new Runtime();
-      runtimes.add(serverRuntime);
+    // server
+    useRuntime(new Runtime(), () => {
+      const { ApiDefinition, ApiProvider, useRouter } = require('@remote-ioc/runtime');
+      const { SocketIOServerRouter } = require('../ServerRouter');
 
-      @ApiDefinition('fork-worker')
-      @ApiRuntime(serverRuntime)
-      class IForkWorker extends IForkWorkerBase {}
+      const IForkWorker = ApiDefinition('fork-worker')(IForkWorkerBase);
 
       @ApiProvider(IForkWorker)
-      @ApiRuntime(serverRuntime)
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      class ForkWorker implements IForkWorker {
+      class ForkWorker implements IForkWorkerBase {
         async method(): Promise<string> {
           return 'async-return';
         }
@@ -66,27 +58,28 @@ describe('socket.io', () => {
         }
       }
 
-      @ApiSocket(ServerSocket, server)
-      @ApiRuntime(serverRuntime)
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      class ServerInstance {}
-    }
-    const clientInstance = (() => {
-      const clientRuntime = new Runtime();
-      runtimes.add(clientRuntime);
+      useRouter(SocketIOServerRouter, server);
+    });
+    // client
+    const methodResult = useRuntime(new Runtime(), () => {
+      const { Manager } = require('socket.io-client');
+      const { ApiDefinition, useRouter, useApi } = require('@remote-ioc/runtime');
+      const { SocketIOClientRouter } = require('../ClientRouter');
 
-      @ApiDefinition('fork-worker')
-      @ApiRuntime(clientRuntime)
-      class IForkWorker extends IForkWorkerBase {}
+      const IForkWorker = ApiDefinition('fork-worker')(IForkWorkerBase);
 
-      @ApiSocket(ClientSocket, io('http://localhost:9090', { reconnectionDelay: 0, forceNew: true }))
-      @ApiRuntime(clientRuntime)
-      class ClientInstance {
-        @ApiConsumer public static worker: IForkWorker;
-      }
-      return ClientInstance;
-    })();
-    expect(await clientInstance.worker.method()).toEqual('async-return');
+      useRouter(
+        SocketIOClientRouter,
+        new Manager('http://localhost:9090', {
+          pingTimeout: 60000,
+          reconnectionDelay: 0,
+          forceNew: true,
+        })
+      );
+
+      return useApi(IForkWorker).method();
+    });
+    await expect(methodResult).resolves.toEqual('async-return');
   });
 
   // it('method(...number): Promise<string>', async () => {

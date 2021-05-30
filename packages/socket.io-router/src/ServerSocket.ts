@@ -1,48 +1,29 @@
-/* eslint-disable max-classes-per-file */
-import { IPCSocket } from '@remote-ioc/runtime';
-import { DefaultedMap } from '@remote-ioc/runtime/lib/Helpers';
-import { Server, Socket } from 'socket.io';
+import { Namespace } from 'socket.io';
+import { CollectionMap, ISocket } from '@remote-ioc/runtime';
 
-export class ChildServerSocket implements IPCSocket {
-  constructor(private socket: Socket) {}
-  close() {
-    this.socket.disconnect();
-  }
-
-  send(scope: string, channel: string, ...args: any[]) {
-    this.socket.emit(scope, channel, ...args);
-  }
-
-  on(scope: string, channel: string, handler: (...args: any[]) => void) {
-    this.socket.on(scope, (eventChannel, ...args) => {
-      if (channel !== eventChannel) {
-        return;
-      }
-      handler(...args);
-    });
-  }
-}
-
-export class ServerSocket implements IPCSocket {
-  private handlers = new DefaultedMap<string, ((...args: any[]) => void)[]>(() => []);
-  constructor(private readonly server: Server) {
-    server.on('connection', (socket) => {
-      const childSocket = new ChildServerSocket(socket);
-      this.handlers.get(`$runtime\0connected`).forEach((handler) => handler(childSocket));
-
-      socket.on('message', (scope: string, channel: string, ...args) => {
-        this.handlers.get(`${scope}\0${channel}`).forEach((handler) => handler(...args));
+export class ServerSocket implements ISocket {
+  private handlers = new CollectionMap<string, (...args: any[]) => void>();
+  constructor(private readonly socket: Namespace) {
+    socket.on('connection', (client) => {
+      client.on('message', (channel: string, ...args) => {
+        this.handlers.forEachValue(channel, (handler) => handler(...args));
       });
     });
   }
 
   close(): void {
-    this.server.close();
+    this.socket.disconnectSockets();
   }
-  send(scope: string, channel: string, ...args: any[]): void {
-    this.server.emit(scope, channel, ...args);
+  send(channel: string, ...args: any[]): this {
+    this.socket.send(channel, ...args);
+    return this;
   }
-  on(scope: string, channel: string, handler: (...args: any[]) => void): void {
-    this.handlers.get(`${scope}\0${channel}`).push(handler);
+  on(channel: string, handler: (...args: any[]) => void): this {
+    this.handlers.push(channel, handler);
+    return this;
+  }
+  off(channel: string, handler: (...args: any[]) => void): this {
+    this.handlers.remove(channel, handler);
+    return this;
   }
 }

@@ -1,22 +1,36 @@
-import { IPCSocket } from '@remote-ioc/runtime';
-import { io, Socket } from 'socket.io-client';
+import { ISocket } from '@remote-ioc/runtime';
+import type { Namespace, Server } from 'socket.io';
+import type { Socket } from 'socket.io-client';
 
-export class ClientSocket implements IPCSocket {
-  constructor(private socket: Socket = io()) {}
+export class ClientSocket implements ISocket {
+  constructor(private readonly socket: Server | Socket | Namespace) {}
+
   close() {
-    this.socket.close();
+    (this.socket as any).disconnect?.();
+    (this.socket as any).close?.();
   }
 
-  send(scope: string, channel: string, ...args: any[]) {
-    this.socket.send(scope, channel, ...args);
+  send(channel: string, ...args: any[]): this {
+    this.socket.send(channel, ...args);
+    return this;
   }
 
-  on(scope: string, channel: string, handler: (...args: any[]) => void) {
-    this.socket.on(scope, (eventChannel, ...args) => {
-      if (channel !== eventChannel) {
+  on(channel: string, handler: (...args: any[]) => void): this {
+    const handlerWrapper = (messageChannel: string, ...args: any[]) => {
+      if (channel !== messageChannel) {
         return;
       }
       handler(...args);
-    });
+    };
+    // @ts-ignore
+    // eslint-disable-next-line no-param-reassign
+    handler.handlerWrapper = handlerWrapper;
+    this.socket.on('message', handlerWrapper);
+    return this;
+  }
+
+  off(_channel: string, handler: (...args: any[]) => void): this {
+    this.socket.off('message', (handler as any).handlerWrapper);
+    return this;
   }
 }

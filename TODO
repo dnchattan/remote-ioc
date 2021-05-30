@@ -7,7 +7,7 @@
   ☐ Event support
 
 # Routers
-  ☐ Socket.io
+  ✔ Socket.io @done(21-05-30 17:37)
   ✔ Electron @started(21-05-30 10:40) @done(21-05-30 15:59) @lasted(5h19m45s)
     ✔ ~Add "flat object" support to useApi~ @done(21-05-30 15:14)
     ✔ Implement electron ISocket @done(21-05-30 15:54)

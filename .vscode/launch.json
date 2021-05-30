@@ -16,8 +16,8 @@
         "${workspaceFolder}/scripts/jest.setup.debug.js",
         "--config",
         "${workspaceFolder}/jest.config.js",
-        // "--testNamePattern",
-        // "process.fork"
+        "--testNamePattern",
+        "socket.io"
       ],
       "sourceMaps": true,
       "skipFiles": [
