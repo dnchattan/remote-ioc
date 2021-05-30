@@ -1,6 +1,6 @@
 {
   "name": "@remote-ioc/socket.io-router",
-  "version": "1.0.9",
+  "version": "0.1.0",
   "description": "Remote socket.io Router for @remote-ioc",
   "main": "lib/index.js",
   "author": "dnchattan@gmail.com",
@@ -13,11 +13,11 @@
   "peerDependencies": {
     "socket.io": "^4.0.0",
     "socket.io-client": "^4.0.0",
-    "@remote-ioc/runtime": "^1.0.9"
+    "@remote-ioc/runtime": "^1.1.0"
   },
   "dependencies": {},
   "devDependencies": {
-    "@remote-ioc/runtime": "^1.0.9",
+    "@remote-ioc/runtime": "^1.1.0",
     "@types/jest": "^26.0.20",
     "socket.io": "^4.0.0",
     "socket.io-client": "^4.0.0",
