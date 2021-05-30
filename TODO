@@ -4,7 +4,7 @@
   ✔ Add loopback "discovery" flow to LocalRouter
 
 # Routers
-  ☐ Socket.io
+  ☐ Socket.io @started(21-05-30 10:40)
   ☐ Electron
   ☐ Named pipes
 

@@ -9,7 +9,7 @@
   ],
   "references": [
     {
-      "path": "packages/electron-socket/tsconfig.json"
+      "path": "packages/electron-router/tsconfig.json"
     },
     {
       "path": "packages/process-router/tsconfig.json"
@@ -18,7 +18,7 @@
       "path": "packages/runtime/tsconfig.json"
     },
     {
-      "path": "packages/socket.io-socket/tsconfig.json"
+      "path": "packages/socket.io-router/tsconfig.json"
     }
   ]
 }

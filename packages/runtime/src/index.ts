@@ -6,5 +6,6 @@ export * from './Types';
 export * from './FunctionalApi';
 export * from './LocalRouter';
 export * from './ProviderServer';
+export * from './RouterBase';
 export * from './Runtime';
 export * from './RuntimeContext';

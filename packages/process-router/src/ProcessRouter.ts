@@ -1,15 +1,6 @@
 /* eslint-disable max-classes-per-file */
-import { EventEmitter } from 'events';
 import type { ChildProcess, Serializable } from 'child_process';
-import {
-  ApiDefinition,
-  Constructor,
-  DefaultedMap,
-  IRouter,
-  ISocket,
-  ProviderServer,
-  ApiProvider,
-} from '@remote-ioc/runtime';
+import { ApiDefinition, Constructor, ISocket, ApiProvider, RouterBase } from '@remote-ioc/runtime';
 
 class ProcessSocket implements ISocket {
   constructor(private readonly scope: string, private readonly ipc: ChildProcess | NodeJS.Process) {
@@ -44,11 +35,7 @@ class ProcessSocket implements ISocket {
   }
 }
 
-export class ProcessRouter extends EventEmitter implements IRouter {
-  private providers = new Set<Constructor>();
-  private providerMap = new DefaultedMap<Constructor, unknown>((Provider) => new Provider());
-  private serverMap = new Map<Constructor, ProviderServer>();
-
+export class ProcessRouter extends RouterBase {
   constructor(private readonly ipc: ChildProcess | NodeJS.Process) {
     super();
     if (!ipc.send) {
@@ -58,34 +45,6 @@ export class ProcessRouter extends EventEmitter implements IRouter {
     setTimeout(() => {
       this.ipc.send!(['$process-router', 'discover/request']);
     }, 0);
-  }
-
-  private createServer<D extends Constructor, P extends D>(Definition: D, Provider: P): this {
-    if (this.serverMap.get(Definition)) {
-      return this;
-    }
-    const provider = this.providerMap.get(Provider) as InstanceType<D>;
-    const server = new ProviderServer(Definition, provider, this);
-    this.serverMap.set(Definition, server);
-    return this;
-  }
-
-  async queryDefinition(Definition: Constructor): Promise<boolean> {
-    const defName = ApiDefinition.nameOf(Definition);
-    for (const provider of this.providers) {
-      if (ApiProvider.implementationsOf(provider).some((definition) => ApiDefinition.nameOf(definition) === defName)) {
-        return true;
-      }
-    }
-    return false;
-  }
-
-  registerProvider<P extends Constructor>(Provider: P): this {
-    this.providers.add(Provider);
-    for (const definition of ApiProvider.implementationsOf(Provider)) {
-      this.createServer(definition, Provider);
-    }
-    return this;
   }
 
   getSocket(Definition: Constructor): ISocket {

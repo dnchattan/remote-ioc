@@ -1,7 +1,7 @@
 {
-  "name": "@remote-ioc/socket.io-socket",
+  "name": "@remote-ioc/socket.io-router",
   "version": "1.0.9",
-  "description": "Remote socket.io Socket for @remote-ioc",
+  "description": "Remote socket.io Router for @remote-ioc",
   "main": "lib/index.js",
   "author": "dnchattan@gmail.com",
   "license": "MIT",

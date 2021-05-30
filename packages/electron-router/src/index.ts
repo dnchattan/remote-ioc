@@ -1,2 +1,1 @@
-export * from './IpcMainSocket';
-export * from './IpcRendererSocket';
+export * from './ElectronRouter';
