@@ -1,16 +1,29 @@
-const { ApiProvider, useRouter } = require('@remote-ioc/runtime');
+const { ApiProvider, useRouter, useApi } = require('@remote-ioc/runtime');
 const { app, BrowserWindow } = require('electron');
 const { ElectronRouter } = require('../../lib');
 const path = require('path');
-const { ITestApi } = require('./Shared');
+const { IMainApi, IRendererApi } = require('./Shared');
 
-class TestApi {
-  async method() {
-    return 'foo';
+let data = undefined;
+function receiveData(value) {
+  data = value;
+}
+
+class MainApi {
+  async sendData(value) {
+    receiveData(value);
+  }
+  async done() {
+    if (data !== 'foo') {
+      process.exitCode = 1;
+    } else {
+      process.exitCode = 0;
+    }
+    app.quit();
   }
 }
 
-ApiProvider(ITestApi)(TestApi);
+ApiProvider(IMainApi)(MainApi);
 useRouter(ElectronRouter);
 
 async function createWindow() {
@@ -21,10 +34,12 @@ async function createWindow() {
       contextIsolation: true,
       enableRemoteModule: true,
     },
+    show: false,
   });
   mainWindow.loadURL(path.join(__dirname, 'index.html'));
   mainWindow.once('ready-to-show', () => {
-    mainWindow.show();
+    useApi(IRendererApi).sendData('foo');
+    // mainWindow.show();
   });
 }
 

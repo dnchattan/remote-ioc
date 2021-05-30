@@ -1,7 +1,24 @@
-const { useApi, useRouter } = require('@remote-ioc/runtime');
+const { useApi, useRouter, ApiProvider } = require('@remote-ioc/runtime');
 const { contextBridge } = require('electron');
 const { ElectronRouter } = require('../../lib');
-const { ITestApi } = require('./Shared');
+const { IMainApi, IRendererApi } = require('./Shared');
+
+const mainApi = useApi(IMainApi);
+let completeCallback;
+function onTestComplete(callback) {
+  completeCallback = callback;
+}
+
+let data = undefined;
+class RendererApi {
+  sendData(value) {
+    data = value;
+    mainApi.sendData(data);
+    completeCallback();
+    return Promise.resolve();
+  }
+}
+ApiProvider(IRendererApi)(RendererApi);
 
 useRouter(ElectronRouter);
 
@@ -19,4 +36,5 @@ function exposeApi(api) {
   return result;
 }
 
-contextBridge.exposeInMainWorld('TestApi', exposeApi(useApi(ITestApi)));
+contextBridge.exposeInMainWorld('MainApi', exposeApi(mainApi));
+contextBridge.exposeInMainWorld('onTestComplete', onTestComplete);

@@ -9,7 +9,9 @@
 # Routers
   ☐ Socket.io
   ☐ Electron @started(21-05-30 10:40)
-    ☐ Add "flat object" support to useApi
+    ✔ ~Add "flat object" support to useApi~ @done(21-05-30 15:14)
+    ☐ Implement electron ISocket
+    ☐ Move electron API bridge wrapper from test app to library code
   ☐ Named pipes
 
 # Runtime Enhancements

@@ -1,11 +1,21 @@
 const { ApiDefinition, methodStub } = require('@remote-ioc/runtime');
 
-class ITestApi {
-  method() {
+class IMainApi {
+  sendData(value) {
+    methodStub(this);
+  }
+  done() {
+    methodStub(this);
+  }
+}
+
+class IRendererApi {
+  sendData(value) {
     methodStub(this);
   }
 }
 
 module.exports = {
-  ITestApi: ApiDefinition('test-api')(ITestApi),
+  IMainApi: ApiDefinition('main-api')(IMainApi),
+  IRendererApi: ApiDefinition('renderer-api')(IRendererApi),
 };
