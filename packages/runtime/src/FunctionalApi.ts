@@ -13,5 +13,6 @@ export function useRouter<R extends ConstructorWithArgs<IRouter>>(
 }
 
 export function useApi<D extends Constructor>(Definition: ApiDefinitionTarget<D>): InstanceType<D> {
-  return getRuntime().getProvider(Definition);
+  const api = getRuntime().getProvider(Definition);
+  return api;
 }

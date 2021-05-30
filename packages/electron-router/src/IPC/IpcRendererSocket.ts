@@ -5,6 +5,7 @@ export class IpcRendererSocket implements IElectronIpc {
   constructor(private readonly ipc: IpcRenderer = ipcRenderer) {}
 
   send(scope: string, channel: string, ...args: any[]): this {
+    console.log('ipcRenderer_tx', { scope, channel, args });
     this.ipc.send(scope, channel, ...args);
     return this;
   }
@@ -13,6 +14,7 @@ export class IpcRendererSocket implements IElectronIpc {
       if (channel !== messageChannel) {
         return;
       }
+      console.log('ipcRenderer_rcv', { scope, channel, args });
       handler(...args);
     };
     // @ts-ignore

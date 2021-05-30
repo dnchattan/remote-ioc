@@ -3,9 +3,13 @@
   ✔ Add ability to disable loopback in current process (env var?)
   ✔ Add loopback "discovery" flow to LocalRouter
 
+# Functionality
+  ☐ Event support
+
 # Routers
-  ☐ Socket.io @started(21-05-30 10:40)
-  ☐ Electron
+  ☐ Socket.io
+  ☐ Electron @started(21-05-30 10:40)
+    ☐ Add "flat object" support to useApi
   ☐ Named pipes
 
 # Runtime Enhancements

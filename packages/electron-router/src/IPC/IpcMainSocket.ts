@@ -8,6 +8,7 @@ export class IpcMainSocket implements IElectronIpc {
     private readonly contents: typeof Electron.WebContents = webContents
   ) {}
   send(scope: string, channel: string, ...args: any[]): this {
+    console.log('ipcMain_tx', { scope, channel, args });
     this.contents.getAllWebContents().forEach((contents) => contents.send(scope, channel, ...args));
     return this;
   }
@@ -16,6 +17,7 @@ export class IpcMainSocket implements IElectronIpc {
       if (channel !== messageChannel) {
         return;
       }
+      console.log('ipcMain_rcv', { scope, channel, args });
       handler(...args);
     };
     // @ts-ignore

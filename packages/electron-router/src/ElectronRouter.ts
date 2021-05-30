@@ -11,9 +11,7 @@ export class ElectronRouter extends RouterBase {
     this.ipc = renderer() ? new IpcRendererSocket() : new IpcMainSocket();
     this.ipc.on('$electron-router', 'discover/request', this.onDiscoverRequest);
     this.ipc.on('$electron-router', 'discover/response', this.onDiscoverResponse);
-    setTimeout(() => {
-      this.ipc.send('$electron-router', 'discover/request');
-    }, 0);
+    this.ipc.send('$electron-router', 'discover/request');
   }
 
   private onDiscoverRequest = () => {
@@ -21,7 +19,7 @@ export class ElectronRouter extends RouterBase {
     for (const provider of this.providers) {
       definitions.push(...ApiProvider.implementationsOf(provider));
     }
-    this.ipc.send('$local-router', 'discover/response', definitions);
+    this.ipc.send('$electron-router', 'discover/response', definitions);
   };
 
   private onDiscoverResponse = (definitions: Constructor[]) => {

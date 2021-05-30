@@ -6,10 +6,9 @@ import { IRouter, IRuntime } from './Interfaces';
 import { buildProxyFor } from './ProxyBuilder';
 import { Constructor } from './Types';
 
-/**
- * Should this runtime concept really be "RouterManager" or something like that?
- * Then runtime is really just a context which wraps routers and APIs all together and nothing more?
- */
+export interface ProviderOptions {
+  plainObject?: boolean;
+}
 
 export class Runtime implements IRuntime {
   private definitions = new Map<string, Constructor>();
