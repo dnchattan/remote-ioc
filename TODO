@@ -1,0 +1,17 @@
+# Get local flow working 100%
+  ✔ Move loopback to global scope
+  ✔ Add ability to disable loopback in current process (env var?)
+  ✔ Add loopback "discovery" flow to LocalRouter
+
+# Routers
+  ☐ Socket.io
+  ☐ Electron
+  ☐ Named pipes
+
+# Runtime Enhancements
+  ☐ Add logging middleware
+  ☐ Add middleware support
+
+# Backlog
+  ✔ Re-enable and fix import/no-cycle violations @done(21-05-30 10:33)
+  ☐ Fix multi-router bugs with process router
