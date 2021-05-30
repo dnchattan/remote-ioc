@@ -57,7 +57,7 @@ export class ProcessRouter extends EventEmitter implements IRouter {
     this.ipc.on('message', this.handleProcessMessage);
     setTimeout(() => {
       this.ipc.send!(['$process-router', 'discover/request']);
-    }, 500);
+    }, 0);
   }
 
   private createServer<D extends Constructor, P extends D>(Definition: D, Provider: P): this {

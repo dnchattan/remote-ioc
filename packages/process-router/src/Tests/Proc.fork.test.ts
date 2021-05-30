@@ -1,8 +1,6 @@
-import { resetRuntime, useApi, useRouter } from '@remote-ioc/runtime';
+/* eslint-disable global-require */
 import { fork, ChildProcess } from 'child_process';
 import path from 'path';
-import { ProcessRouter } from '../ProcessSocket';
-import { IForkWorker1, IForkWorker2 } from './Proc.fork.definitions';
 
 export async function sleep(ms: number): Promise<void> {
   return new Promise<void>((resolve) => setTimeout(resolve, ms));
@@ -25,21 +23,27 @@ describe('process.fork', () => {
   }
 
   afterEach(() => {
-    resetRuntime();
+    jest.resetModules();
     childProcesses.forEach((cp) => cp.kill());
     childProcesses = [];
   });
 
   it('method(void): Promise<string>', async () => {
+    const { ProcessRouter } = require('../ProcessRouter');
+    const { useApi, useRouter } = require('@remote-ioc/runtime');
+    const { IForkWorker1 } = require('./Proc.fork.definitions');
     const cp = createWorker(1);
     useRouter(ProcessRouter, cp);
     expect(await useApi(IForkWorker1).method()).toEqual('async-return');
   });
 
   it('multiple workers', async () => {
+    const { ProcessRouter } = require('../ProcessRouter');
+    const { useApi, useRouter } = require('@remote-ioc/runtime');
+    const { IForkWorker1, IForkWorker2 } = require('./Proc.fork.definitions');
     const cp1 = createWorker(1);
-    useRouter(ProcessRouter, cp1);
     const cp2 = createWorker(2);
+    useRouter(ProcessRouter, cp1);
     useRouter(ProcessRouter, cp2);
     expect(await useApi(IForkWorker1).identity()).toEqual('1');
     expect(await useApi(IForkWorker2).identity()).toEqual('2');

@@ -1,5 +1,4 @@
 import 'reflect-metadata';
-// eslint-disable-next-line import/no-cycle
 import { getRuntime } from '../RuntimeContext';
 import type { Constructor, Promisify, StaticError } from '../Types';
 

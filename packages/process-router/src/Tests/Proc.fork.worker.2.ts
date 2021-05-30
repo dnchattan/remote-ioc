@@ -1,6 +1,6 @@
 /* eslint-disable class-methods-use-this */
 import { ApiProvider, useRouter } from '@remote-ioc/runtime';
-import { ProcessRouter } from '../ProcessSocket';
+import { ProcessRouter } from '../ProcessRouter';
 import { IForkWorker2 } from './Proc.fork.definitions';
 
 @ApiProvider(IForkWorker2)
