@@ -1,16 +1,27 @@
+/* eslint-disable max-classes-per-file */
 /* eslint-disable class-methods-use-this */
-import { ApiDefinition } from '@remote-ioc/runtime';
+import { ApiDefinition, methodStub } from '@remote-ioc/runtime';
 
-@ApiDefinition('fork-worker')
-export class IForkWorker {
+@ApiDefinition('fork-worker-1')
+export class IForkWorker1 {
+  async identity(): Promise<string> {
+    methodStub(this);
+  }
   async method(): Promise<string> {
-    throw new Error('not implemented');
+    methodStub(this);
   }
   async methodWithParams(..._value: number[]): Promise<string> {
-    throw new Error('not implemented');
+    methodStub(this, _value);
   }
   value: Promise<string> = Promise.resolve('');
   get accessor(): Promise<string> {
-    throw new Error('not implemented');
+    return methodStub(this);
+  }
+}
+
+@ApiDefinition('fork-worker-2')
+export class IForkWorker2 {
+  async identity(): Promise<string> {
+    methodStub(this);
   }
 }

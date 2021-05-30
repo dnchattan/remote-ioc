@@ -13,7 +13,7 @@
         // "--inspect-brk",
         "--runInBand",
         "--setupFilesAfterEnv",
-        "${workspaceFolder}/scripts/jest-debug-setup.js",
+        "${workspaceFolder}/scripts/jest.setup.debug.js",
         "--config",
         "${workspaceFolder}/jest.config.js",
         "--testNamePattern",

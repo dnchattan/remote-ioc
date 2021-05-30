@@ -1,12 +1,14 @@
-/* eslint-disable max-classes-per-file */
 /* eslint-disable class-methods-use-this */
 import { ApiProvider, useRouter } from '@remote-ioc/runtime';
 import { ProcessRouter } from '../ProcessSocket';
-import { IForkWorker } from './Proc.fork.definitions';
+import { IForkWorker1 } from './Proc.fork.definitions';
 
-@ApiProvider(IForkWorker)
+@ApiProvider(IForkWorker1)
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-export class ForkWorker implements IForkWorker {
+export class ForkWorker1 implements IForkWorker1 {
+  async identity(): Promise<string> {
+    return '2';
+  }
   async method(): Promise<string> {
     return 'async-return';
   }

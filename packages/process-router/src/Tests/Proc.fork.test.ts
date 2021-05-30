@@ -1,18 +1,18 @@
-import { useApi, useRouter } from '@remote-ioc/runtime';
+import { resetRuntime, useApi, useRouter } from '@remote-ioc/runtime';
 import { fork, ChildProcess } from 'child_process';
 import path from 'path';
 import { ProcessRouter } from '../ProcessSocket';
-import { IForkWorker } from './Proc.fork.definitions';
+import { IForkWorker1, IForkWorker2 } from './Proc.fork.definitions';
 
 export async function sleep(ms: number): Promise<void> {
   return new Promise<void>((resolve) => setTimeout(resolve, ms));
 }
 
 describe('process.fork', () => {
-  let childProcess: ChildProcess;
+  let childProcesses: ChildProcess[] = [];
 
-  beforeEach(() => {
-    childProcess = fork(path.join(__dirname, './Proc.fork.worker.ts'), [], {
+  function createWorker(num: number) {
+    const cp = fork(path.join(__dirname, `./Proc.fork.worker.${num}.ts`), [], {
       stdio: ['pipe', 'pipe', 'pipe', 'ipc'],
       execArgv: ['-r', 'ts-node/register'],
       env: {
@@ -20,15 +20,29 @@ describe('process.fork', () => {
         TS_NODE_TRANSPILE_ONLY: 'true',
       },
     });
-  });
+    childProcesses.push(cp);
+    return cp;
+  }
 
   afterEach(() => {
-    childProcess.kill();
+    resetRuntime();
+    childProcesses.forEach((cp) => cp.kill());
+    childProcesses = [];
   });
 
   it('method(void): Promise<string>', async () => {
-    useRouter(ProcessRouter, childProcess);
-    expect(await useApi(IForkWorker).method()).toEqual('async-return');
+    const cp = createWorker(1);
+    useRouter(ProcessRouter, cp);
+    expect(await useApi(IForkWorker1).method()).toEqual('async-return');
+  });
+
+  it('multiple workers', async () => {
+    const cp1 = createWorker(1);
+    useRouter(ProcessRouter, cp1);
+    const cp2 = createWorker(2);
+    useRouter(ProcessRouter, cp2);
+    expect(await useApi(IForkWorker1).identity()).toEqual('1');
+    expect(await useApi(IForkWorker2).identity()).toEqual('2');
   });
 
   // it('method(...number): Promise<string>', async () => {
