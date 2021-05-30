@@ -1,48 +1,49 @@
 /* eslint-disable max-classes-per-file */
-import { Runtime } from '../Runtime';
+import { useRuntime } from '../RuntimeContext';
 import { ApiDefinition } from './ApiDefinition';
 import { ApiProvider } from './ApiProvider';
-import { ApiRuntime } from './ApiRuntime';
-import { getApiProviders, getApiProviderNames } from './getApiProviders';
 
 describe('@ApiProvider', () => {
-  let testRuntime: Runtime = new Runtime();
-  beforeEach(() => {
-    testRuntime = new Runtime();
+  it('typical class', () => {
+    class Provider {}
+    expect(() => ApiProvider.implementationsOf(Provider)).toThrowError(
+      `Target class 'Provider' is not marked with @ApiProvider`
+    );
   });
-
-  it('undecorated', () => {
-    class Test {}
-    expect(getApiProviders(Test)).toEqual([]);
-    expect(getApiProviderNames(Test)).toEqual([]);
+  it('decorated class', () => {
+    const runtime = {
+      registerDefinition: jest.fn(),
+      registerProvider: jest.fn(),
+      getProvider: jest.fn(),
+      useRouter: jest.fn(),
+    };
+    useRuntime(runtime, () => {
+      @ApiDefinition('my-api')
+      class Definition {}
+      @ApiProvider(Definition)
+      class Provider {}
+      expect(ApiProvider.implementationsOf(Provider)).toEqual([Definition]);
+      expect(runtime.registerProvider).toBeCalledWith(Provider);
+    });
   });
-
-  it('concrete class', () => {
-    @ApiDefinition('def-1')
-    @ApiRuntime(testRuntime)
-    class Definition1 {}
-
-    @ApiProvider(Definition1)
-    @ApiRuntime(testRuntime)
-    class Test {}
-
-    expect(getApiProviders(Test)).toEqual([Definition1]);
-    expect(getApiProviderNames(Test)).toEqual(['def-1']);
-  });
-
-  it('multiple on one target', () => {
-    @ApiDefinition('def-1')
-    @ApiRuntime(testRuntime)
-    class Definition1 {}
-    @ApiDefinition('def-2')
-    @ApiRuntime(testRuntime)
-    class Definition2 {}
-
-    @ApiProvider(Definition1)
-    @ApiProvider(Definition2)
-    @ApiRuntime(testRuntime)
-    class Test {}
-    expect(getApiProviders(Test)).toEqual([Definition2, Definition1]);
-    expect(getApiProviderNames(Test)).toEqual(['def-2', 'def-1']);
+  it('multiple decorators', () => {
+    const runtime = {
+      registerDefinition: jest.fn(),
+      registerProvider: jest.fn(),
+      getProvider: jest.fn(),
+      useRouter: jest.fn(),
+    };
+    useRuntime(runtime, () => {
+      @ApiDefinition('my-api-1')
+      class Definition1 {}
+      @ApiDefinition('my-api-2')
+      class Definition2 {}
+      @ApiProvider(Definition1)
+      @ApiProvider(Definition2)
+      class Provider {}
+      expect(ApiProvider.implementationsOf(Provider)).toEqual([Definition2, Definition1]);
+      expect(runtime.registerProvider).toHaveBeenNthCalledWith(1, Provider);
+      expect(runtime.registerProvider).toHaveBeenNthCalledWith(2, Provider);
+    });
   });
 });

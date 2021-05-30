@@ -1,0 +1,24 @@
+# Get local flow working 100%
+  ✔ Move loopback to global scope
+  ✔ Add ability to disable loopback in current process (env var?)
+  ✔ Add loopback "discovery" flow to LocalRouter
+
+# Functionality
+  ☐ Event support
+
+# Routers
+  ✔ Socket.io @done(21-05-30 17:37)
+  ✔ Electron @started(21-05-30 10:40) @done(21-05-30 15:59) @lasted(5h19m45s)
+    ✔ ~Add "flat object" support to useApi~ @done(21-05-30 15:14)
+    ✔ Implement electron ISocket @done(21-05-30 15:54)
+    ✔ Move electron API bridge wrapper from test app to library code @done(21-05-30 15:59)
+  ☐ Named pipes
+
+# Runtime Enhancements
+  ☐ Add logging middleware
+  ☐ Add middleware support
+
+# Backlog
+  ✔ Re-enable and fix import/no-cycle violations @done(21-05-30 10:33)
+  ☐ Fix multi-router bugs with process router
+  ☐ Fix test teardown leak

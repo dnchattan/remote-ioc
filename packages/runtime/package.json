@@ -1,6 +1,6 @@
 {
   "name": "@remote-ioc/runtime",
-  "version": "1.0.9",
+  "version": "1.1.0",
   "description": "Remote IOC Runtime implementation",
   "entry": "lib/index.js",
   "main": "lib/index.js",
@@ -14,8 +14,9 @@
   },
   "peerDependencies": {},
   "dependencies": {
-    "reflect-metadata": "^0.1.13",
-    "uuid": "^8.3.2"
+    "callsites": "^3.1.0",
+    "nanoid": "^3.1.23",
+    "reflect-metadata": "^0.1.13"
   },
   "devDependencies": {
     "@types/jest": "^26.0.20",

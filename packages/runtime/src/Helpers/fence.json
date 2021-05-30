@@ -1,0 +1,12 @@
+{
+  "dependencies": [
+    "nanoid",
+    "callsite"
+  ],
+  "tags": [
+    "helpers"
+  ],
+  "exports": [
+    "index"
+  ]
+}

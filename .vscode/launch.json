@@ -13,7 +13,7 @@
         // "--inspect-brk",
         "--runInBand",
         "--setupFilesAfterEnv",
-        "${workspaceFolder}/scripts/jest-debug-setup.js",
+        "${workspaceFolder}/scripts/jest.setup.debug.js",
         "--config",
         "${workspaceFolder}/jest.config.js",
         "--testNamePattern",
@@ -24,10 +24,49 @@
         "<node_internals>/**",
         "node_modules/**"
       ],
-      "preLaunchTask": "yarn: tsc",
+      // "preLaunchTask": "yarn: tsc",
       "autoAttachChildProcesses": true,
-      "console": "integratedTerminal",
+      "console": "internalConsole",
       "internalConsoleOptions": "neverOpen"
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Electron: Main",
+      "protocol": "inspector",
+      "runtimeExecutable": "${workspaceFolder}/node_modules/.bin/electron",
+      "runtimeArgs": [
+        "--remote-debugging-port=9223",
+        "${workspaceFolder}/packages/electron-router/src/Test/Main.js",
+      ],
+      "windows": {
+        "runtimeExecutable": "${workspaceFolder}/node_modules/.bin/electron.cmd"
+      },
+      "outFiles": [
+        "${workspaceFolder}/packages/electron-router/lib",
+        "${workspaceFolder}/packages/runtime/lib"
+      ]
+    },
+    {
+      "name": "Electron: Renderer",
+      "type": "pwa-chrome",
+      "request": "attach",
+      "port": 9223,
+      "webRoot": "${workspaceFolder}/packages/electron-router/src/Test",
+      "timeout": 30000,
+      "outFiles": [
+        "${workspaceFolder}/packages/electron-router/lib",
+        "${workspaceFolder}/packages/runtime/lib"
+      ]
+    }
+  ],
+  "compounds": [
+    {
+      "name": "Electron: All",
+      "configurations": [
+        "Electron: Renderer",
+        "Electron: Main"
+      ]
     }
   ]
 }

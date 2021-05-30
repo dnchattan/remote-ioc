@@ -1,0 +1,3 @@
+onTestComplete(() => {
+  window.MainApi.done();
+});

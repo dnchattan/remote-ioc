@@ -1,51 +1,82 @@
 /* eslint-disable max-classes-per-file */
-import { Runtime } from '../Runtime';
-import { ApiDefinition } from './ApiDefinition';
-import { ApiRuntime } from './ApiRuntime';
-import { getApiDefinitionName } from './getApiDefinitionName';
+import { ApiDefinition, methodStub } from './ApiDefinition';
 
 describe('@ApiDefinition', () => {
-  const testRuntime = new Runtime();
-  it('undecorated', () => {
-    class Test {}
-    expect(getApiDefinitionName(Test)).toBeUndefined();
-  });
+  describe('errors', () => {
+    it('is not constructable', () => {
+      @ApiDefinition('my-api')
+      class Definition {}
+      expect(() => new Definition()).toThrowError(`Api definition 'Definition' is not constructable`);
+    });
 
-  it('construction fails', () => {
-    @ApiDefinition('non-constructable')
-    @ApiRuntime(testRuntime)
-    class Test {}
-    expect(() => new Test()).toThrow();
-  });
+    it('nameOf typical class', () => {
+      class Definition {}
+      expect(() => ApiDefinition.nameOf(Definition)).toThrowError(
+        `Target class 'Definition' is not marked with @ApiDefinition`
+      );
+    });
 
-  it('concrete class', () => {
-    @ApiDefinition('concrete-class')
-    @ApiRuntime(testRuntime)
-    class Test {}
-    expect(getApiDefinitionName(Test)).toEqual('concrete-class');
-  });
+    it('multiple definitions', () => {
+      expect(() => {
+        @ApiDefinition('my-api-1')
+        @ApiDefinition('my-api-2')
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        class Definition {}
+      }).toThrowError(`Target 'Definition' is already decorated with an @ApiDefintion`);
+    });
 
-  it('name collision', () => {
-    @ApiDefinition('collision-class')
-    @ApiRuntime(testRuntime)
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    class Test {}
-
-    expect(() => {
-      @ApiDefinition('collision-class')
-      @ApiRuntime(testRuntime)
+    it('call method fails', () => {
+      @ApiDefinition('my-api')
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      class Test2 {}
-    }).toThrowError(`Api definition already exists for the name 'collision-class'.`);
+      class Definition {
+        method(arg0: string, arg1: boolean): Promise<string> {
+          methodStub(this, arg0, arg1);
+        }
+      }
+      expect(Definition.prototype.method.bind(undefined, 'arg0', false)).toThrowError('Cannot call interface method');
+    });
+
+    it('enforce promise types', () => {
+      // @ts-expect-error
+      @ApiDefinition('my-api')
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      class SyncMethod {
+        syncMethod(): string {
+          methodStub(this);
+        }
+      }
+
+      // @ts-expect-error
+      @ApiDefinition('my-api')
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      class VoidMethod {
+        voidMethod(): void {
+          methodStub(this);
+        }
+      }
+
+      // @ts-expect-error
+      @ApiDefinition('my-api')
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      class SyncProperty {
+        syncProperty: string = 'some-value';
+      }
+    });
   });
 
-  it('multiple on one target', () => {
-    expect(() => {
-      @ApiDefinition('class-1')
-      @ApiDefinition('class-2')
-      @ApiRuntime(testRuntime)
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      class Test {}
-    }).toThrowError('Target already decorated with an @ApiDefintion');
+  describe('success', () => {
+    it('multiple matching definitions', () => {
+      // not sure if this is good to actually support, but... no reason not to I guess?
+      @ApiDefinition('my-api')
+      @ApiDefinition('my-api')
+      class Definition {}
+      expect(() => ApiDefinition.nameOf(Definition)).not.toThrow();
+    });
+
+    it('nameOf decorated class', () => {
+      @ApiDefinition('my-api')
+      class Definition {}
+      expect(ApiDefinition.nameOf(Definition)).toEqual('my-api');
+    });
   });
 });

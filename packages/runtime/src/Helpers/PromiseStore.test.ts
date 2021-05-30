@@ -15,6 +15,7 @@ describe('PromiseStore', () => {
   });
   it('invalid id', () => {
     const store = new PromiseStore();
-    expect(() => store.resolve(42, 'the answer')).toThrow();
+    expect(() => store.resolve('42', 'the answer')).toThrow();
+    expect(() => store.reject('42', new Error())).toThrow();
   });
 });

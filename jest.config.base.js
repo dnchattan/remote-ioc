@@ -1,3 +1,4 @@
+const path = require('path');
 /*
  * For a detailed explanation regarding each configuration property and type check, visit:
  * https://jestjs.io/docs/en/configuration.html
@@ -9,6 +10,8 @@ module.exports = {
 
   // The directory where Jest should output its coverage files
   coverageDirectory: 'coverage',
+
+  setupFilesAfterEnv: [path.join(__dirname, './scripts/jest.setup.js')],
 
   // An array of regexp pattern strings used to skip coverage collection
   coveragePathIgnorePatterns: ['\\\\node_modules\\\\', 'src/Tests?/'],
