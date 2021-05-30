@@ -8,10 +8,10 @@
 
 # Routers
   ☐ Socket.io
-  ☐ Electron @started(21-05-30 10:40)
+  ✔ Electron @started(21-05-30 10:40) @done(21-05-30 15:59) @lasted(5h19m45s)
     ✔ ~Add "flat object" support to useApi~ @done(21-05-30 15:14)
-    ☐ Implement electron ISocket
-    ☐ Move electron API bridge wrapper from test app to library code
+    ✔ Implement electron ISocket @done(21-05-30 15:54)
+    ✔ Move electron API bridge wrapper from test app to library code @done(21-05-30 15:59)
   ☐ Named pipes
 
 # Runtime Enhancements
