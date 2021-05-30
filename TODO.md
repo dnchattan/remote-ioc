@@ -3,8 +3,10 @@
  - [X] Add ability to disable loopback in current process (env var?)
  - [X] Add loopback "discovery" flow to LocalRouter
 
- # Cleanup
- - [ ] Add middleware support
+ # Runtime Enhancements
  - [ ] Add logging middleware
- - [ ] Fix multi-router bugs with process router
+ - [ ] Add middleware support
+
+ # Backlog
  - [ ] Re-enable and fix import/no-cycle violations
+ - [X] Fix multi-router bugs with process router
