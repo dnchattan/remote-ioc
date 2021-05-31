@@ -17,7 +17,7 @@
         "--config",
         "${workspaceFolder}/jest.config.js",
         "--testNamePattern",
-        "node-ipc-router"
+        "documentation sample"
       ],
       "sourceMaps": true,
       "skipFiles": [

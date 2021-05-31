@@ -1,11 +1,14 @@
 /* eslint-disable max-classes-per-file */
 import { ApiDefinition } from './Decorators';
-import { PromiseStore } from './Helpers';
+import { hasEvents } from './HasEvents';
+import { CollectionMap, PromiseStore } from './Helpers';
 import { IRouter } from './Interfaces';
 import { ClientMessages, ServerMessages } from './Messages';
 import { Constructor } from './Types';
 
 const internalKeys = ['constructor', 'on', 'off', 'emit'];
+
+export type MessageHandler = (...args: any[]) => void;
 
 export function buildProxyFor<D extends Constructor>(Definition: D, deferredRouter: Promise<IRouter>): D {
   const definitionName = ApiDefinition.nameOf(Definition);
@@ -79,5 +82,37 @@ export function buildProxyFor<D extends Constructor>(Definition: D, deferredRout
     }
     Object.defineProperty(ApiProxyClass.prototype, key, makeMethodDescriptor(key));
   }
+
+  if (hasEvents(Definition)) {
+    const eventListeners = new CollectionMap<string, MessageHandler>();
+    Object.defineProperty(ApiProxyClass.prototype, 'on', {
+      value(eventName: string, handler: (...args: any[]) => void) {
+        const listenerCount = eventListeners.push(eventName, handler);
+        // first listener of this type?
+        if (listenerCount === 1) {
+          deferredSocket.then((socket) => socket.send('sub', { eventName }));
+        }
+        return this;
+      },
+    });
+    Object.defineProperty(ApiProxyClass.prototype, 'off', {
+      value(eventName: string, handler: (...args: any[]) => void) {
+        const oldLength = eventListeners.get(eventName).length;
+        eventListeners.remove(eventName, handler);
+        // last listener of this type?
+        if (oldLength > 0 && eventListeners.get(eventName).length === 0) {
+          deferredSocket.then((socket) => socket.send('unsub', { eventName }));
+        }
+        return this;
+      },
+    });
+
+    deferredSocket.then((socket) => {
+      socket.on('send-event', (message) =>
+        eventListeners.forEachValue(message.eventName, (handler) => handler(...message.args))
+      );
+    });
+  }
+
   return ApiProxyClass as D;
 }

@@ -1,15 +1,7 @@
+import { hasEvents } from './HasEvents';
 import { IRouter, ISocket } from './Interfaces';
 import { CallMethod, GetPropertyValue, ClientMessages, ServerMessages, SubscriptionMessage } from './Messages';
 import { Constructor } from './Types';
-
-function apiHasEvents(
-  api: any
-): api is {
-  off(eventName: string, handler: (...args: any[]) => void): void;
-  on(eventName: string, handler: (...args: any[]) => void): void;
-} {
-  return api.on && typeof api.on === 'function' && api.off && typeof api.off === 'function';
-}
 
 export class ProviderServer<D extends Constructor = Constructor> {
   private enabledEvents = new Map<string, (...args: any[]) => void>();
@@ -73,7 +65,7 @@ export class ProviderServer<D extends Constructor = Constructor> {
 
   private subscribe({ eventName }: SubscriptionMessage): void {
     // TODO: accept context, and store it with the listener!
-    if (!apiHasEvents(this.provider)) {
+    if (!hasEvents(this.provider)) {
       throw new Error('API does not support events!');
     }
     if (this.enabledEvents.has(eventName)) {
@@ -85,7 +77,7 @@ export class ProviderServer<D extends Constructor = Constructor> {
   }
 
   private unsubscribe({ eventName }: SubscriptionMessage): void {
-    if (!apiHasEvents(this.provider)) {
+    if (!hasEvents(this.provider)) {
       throw new Error('API does not support events!');
     }
     const handler = this.enabledEvents.get(eventName);
