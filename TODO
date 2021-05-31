@@ -20,5 +20,6 @@
 
 # Backlog
   ✔ Re-enable and fix import/no-cycle violations @done(21-05-30 10:33)
+  ☐ Consider collapsing socket.io router to one class, and have `createServer` actually create the socket.io instance?
   ☐ Fix multi-router bugs with process router
   ☐ Fix test teardown leak
