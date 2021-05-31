@@ -1,0 +1,7 @@
+{
+  "type": "patch",
+  "comment": "add event handling",
+  "packageName": "@remote-ioc/runtime",
+  "email": "dnchattan@gmail.com",
+  "dependentChangeType": "patch"
+}
