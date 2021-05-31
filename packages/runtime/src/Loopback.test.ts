@@ -9,7 +9,7 @@ describe('loopback', () => {
     loopback.send('1', '0', 'foo');
     expect(handler).not.toHaveBeenCalled();
     loopback.send('0', '1', 'foo');
-    expect(handler).toHaveBeenCalledWith('foo');
+    expect(handler).toHaveBeenCalledWith('foo', undefined);
     loopback.off('0', '0', handler);
     loopback.off('1', '0', handler);
     loopback.send('0', '1', 'foo');
@@ -37,7 +37,7 @@ describe('loopback', () => {
       const handleAZ = jest.fn();
       clientA.on('z', handleAZ);
       serverA.send('z', 'foo');
-      expect(handleAZ).toHaveBeenCalledWith('foo');
+      expect(handleAZ).toHaveBeenCalledWith('foo', undefined);
     });
 
     it('multiple clients', () => {
@@ -50,8 +50,8 @@ describe('loopback', () => {
       const handleAZ2 = jest.fn();
       clientA2.on('z', handleAZ2);
       serverA.send('z', 'foo');
-      expect(handleAZ).toHaveBeenCalledWith('foo');
-      expect(handleAZ2).toHaveBeenCalledWith('foo');
+      expect(handleAZ).toHaveBeenCalledWith('foo', undefined);
+      expect(handleAZ2).toHaveBeenCalledWith('foo', undefined);
     });
 
     it('remove listener', () => {
@@ -66,7 +66,7 @@ describe('loopback', () => {
       clientA.off('z', handleAZ);
       serverA.send('z', 'foo');
       expect(handleAZ).not.toHaveBeenCalled();
-      expect(handleAZ2).toHaveBeenCalledWith('foo');
+      expect(handleAZ2).toHaveBeenCalledWith('foo', undefined);
     });
 
     it('close client', () => {
@@ -81,7 +81,7 @@ describe('loopback', () => {
       clientA.close();
       serverA.send('z', 'foo');
       expect(handleAZ).not.toHaveBeenCalled();
-      expect(handleAZ2).toHaveBeenCalledWith('foo');
+      expect(handleAZ2).toHaveBeenCalledWith('foo', undefined);
     });
   });
 });

@@ -10,7 +10,13 @@ export abstract class RouterBase extends EventEmitter implements IRouter {
   protected providerMap = new DefaultedMap<Constructor, unknown>((Provider) => new Provider());
   protected serverMap = new Map<Constructor, ProviderServer>();
 
-  public abstract getSocket(Definition: Constructor): ISocket;
+  public getSocket<I = Record<string, any>, O = Record<string, any>, C = unknown>(
+    Definition: Constructor
+  ): ISocket<I, O, C> {
+    return this.getSocketCore(Definition) as ISocket<I, O, C>;
+  }
+
+  protected abstract getSocketCore(Definition: Constructor): ISocket;
 
   public async queryDefinition(Definition: Constructor): Promise<boolean> {
     const defName = ApiDefinition.nameOf(Definition);

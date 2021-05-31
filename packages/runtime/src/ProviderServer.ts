@@ -1,5 +1,5 @@
-import type { Serializable } from 'child_process';
 import { IRouter, ISocket } from './Interfaces';
+import { CallMethod, GetPropertyValue, ClientMessages, ServerMessages, SubscriptionMessage } from './Messages';
 import { Constructor } from './Types';
 
 function apiHasEvents(
@@ -13,46 +13,66 @@ function apiHasEvents(
 
 export class ProviderServer<D extends Constructor = Constructor> {
   private enabledEvents = new Map<string, (...args: any[]) => void>();
-  private readonly socket: ISocket;
+  private readonly socket: ISocket<ClientMessages, ServerMessages>;
 
   constructor(Definition: D, private readonly provider: InstanceType<D>, router: IRouter) {
     this.socket = router.getSocket(Definition);
     this.socket.on('get', this.get.bind(this));
     this.socket.on('call', this.call.bind(this));
-    this.socket.on('subscribe', this.subscribe.bind(this));
-    this.socket.on('unsubscribe', this.unsubscribe.bind(this));
+    this.socket.on('sub', this.subscribe.bind(this));
+    this.socket.on('unsub', this.unsubscribe.bind(this));
   }
 
   private forwardEvent(eventName: string, ...args: any[]) {
-    this.socket.send('send-event', eventName, ...args);
+    this.socket.send('send-event', { eventName, args });
   }
 
-  private async get(promiseId: number, propertyName: string): Promise<void> {
+  private async get({ promiseId, propertyName }: GetPropertyValue, context?: unknown): Promise<void> {
     try {
       const value = this.provider[propertyName as keyof InstanceType<D>];
-      this.socket.send('set-promise', promiseId, true /* success */, value);
+      this.socket.send('set-promise', { promiseId, success: true, value });
     } catch (e) {
-      this.socket.send('set-promise', promiseId, false, e);
+      this.socket.send(
+        'set-promise',
+        {
+          promiseId,
+          success: false,
+          error: {
+            message: e.message,
+            errorTag: e.errorTag,
+          },
+        },
+        context
+      );
     }
   }
 
-  private async call(promiseId: number, methodName: string, ...args: Serializable[]): Promise<void> {
+  private async call({ promiseId, methodName, args }: CallMethod, context?: unknown): Promise<void> {
     try {
       const fn = this.provider[methodName as keyof InstanceType<D>];
       if (fn === undefined || typeof fn !== 'function') {
         throw new Error(`'${methodName}' is not a function`);
       }
       const value = await (fn.apply(this.provider, args) as Promise<any>);
-      this.socket.send('set-promise', promiseId, true /* success */, value);
+      this.socket.send('set-promise', { promiseId, success: true, value }, context);
     } catch (e) {
-      this.socket.send('set-promise', promiseId, false, {
-        message: e.message,
-        errorTag: e.errorTag,
-      });
+      this.socket.send(
+        'set-promise',
+        {
+          promiseId,
+          success: false,
+          error: {
+            message: e.message,
+            errorTag: e.errorTag,
+          },
+        },
+        context
+      );
     }
   }
 
-  private subscribe(eventName: string): void {
+  private subscribe({ eventName }: SubscriptionMessage): void {
+    // TODO: accept context, and store it with the listener!
     if (!apiHasEvents(this.provider)) {
       throw new Error('API does not support events!');
     }
@@ -64,7 +84,7 @@ export class ProviderServer<D extends Constructor = Constructor> {
     this.enabledEvents.set(eventName, handler);
   }
 
-  private unsubscribe(eventName: string): void {
+  private unsubscribe({ eventName }: SubscriptionMessage): void {
     if (!apiHasEvents(this.provider)) {
       throw new Error('API does not support events!');
     }
