@@ -1,0 +1,7 @@
+{
+  "type": "patch",
+  "comment": "remove prototype/name from constructor",
+  "packageName": "@remote-ioc/runtime",
+  "email": "dnchattan@gmail.com",
+  "dependentChangeType": "patch"
+}
