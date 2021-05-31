@@ -45,7 +45,7 @@ export class SocketIOServerRouter extends RouterBase {
     this.emit('discover', definitions);
   }
 
-  public getSocket(Definition: Constructor<unknown>): ISocket {
+  public getSocketCore(Definition: Constructor<unknown>): ISocket {
     const name = ApiDefinition.nameOf(Definition);
     return new ServerSocket(this.server.of(`/${name}`));
   }

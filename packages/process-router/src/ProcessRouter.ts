@@ -12,16 +12,16 @@ class ProcessSocket implements ISocket {
     // @ts-ignore
     this.ipc.kill();
   }
-  send(channel: string, ...args: any[]): this {
-    this.ipc.send!([this.scope, channel, ...args]);
+  send(channel: string, message: any, context?: unknown): this {
+    this.ipc.send!([this.scope, channel, message, context]);
     return this;
   }
-  on(channel: string, handler: (...args: any[]) => void): this {
-    const handlerWrapper = ([messageScope, messageChannel, ...args]: Serializable[]) => {
+  on(channel: string, handler: (message: any, context?: unknown) => void): this {
+    const handlerWrapper = ([messageScope, messageChannel, message, context]: Serializable[]) => {
       if (channel !== messageChannel || this.scope !== messageScope) {
         return;
       }
-      handler(...args);
+      handler(message, context);
     };
     // @ts-ignore
     // eslint-disable-next-line no-param-reassign
@@ -29,7 +29,7 @@ class ProcessSocket implements ISocket {
     this.ipc.on('message', handlerWrapper);
     return this;
   }
-  off(_channel: string, handler: (...args: any[]) => void): this {
+  off(_channel: string, handler: (message: any, context?: unknown) => void): this {
     this.ipc.off('message', (handler as any).handlerWrapper);
     return this;
   }
@@ -47,15 +47,11 @@ export class ProcessRouter extends RouterBase {
     }, 0);
   }
 
-  getSocket(Definition: Constructor): ISocket {
+  protected getSocketCore(Definition: Constructor): ISocket {
     return new ProcessSocket(ApiDefinition.nameOf(Definition), this.ipc);
   }
 
-  private handleProcessMessage = ([scope, channel, ...args]: [
-    scope: string,
-    channel: string,
-    ...args: Serializable[]
-  ]) => {
+  private handleProcessMessage = ([scope, channel, message]: [scope: string, channel: string, message: any]) => {
     if (scope !== '$process-router') {
       return;
     }
@@ -65,7 +61,7 @@ export class ProcessRouter extends RouterBase {
         return;
       }
       case 'discover/response': {
-        this.handleDiscoverResponse(args[0] as string[]);
+        this.handleDiscoverResponse(message);
         break;
       }
       default:

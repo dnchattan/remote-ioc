@@ -30,7 +30,7 @@ export class ElectronRouter extends RouterBase {
     this.emit('discover', definitions);
   };
 
-  getSocket(Definition: Constructor): ISocket {
+  getSocketCore(Definition: Constructor): ISocket {
     return new ElectronSocket(ApiDefinition.nameOf(Definition), this.ipc);
   }
 }

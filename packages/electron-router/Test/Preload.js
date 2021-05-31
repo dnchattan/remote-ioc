@@ -1,6 +1,6 @@
 const { useApi, useRouter, ApiProvider } = require('@remote-ioc/runtime');
 const { contextBridge } = require('electron');
-const { ElectronRouter, preloadApi } = require('../../lib');
+const { ElectronRouter, preloadApi } = require('../lib');
 const { IMainApi, IRendererApi } = require('./Shared');
 
 const mainApi = useApi(IMainApi);
