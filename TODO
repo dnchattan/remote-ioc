@@ -12,7 +12,7 @@
     ✔ ~Add "flat object" support to useApi~ @done(21-05-30 15:14)
     ✔ Implement electron ISocket @done(21-05-30 15:54)
     ✔ Move electron API bridge wrapper from test app to library code @done(21-05-30 15:59)
-  ☐ Named pipes
+  ✔ Named pipes @done(21-05-31 17:19)
 
 # Runtime Enhancements
   ☐ Add logging middleware
