@@ -1,0 +1,20 @@
+{
+  "name": "@remote-ioc/electron-router",
+  "entries": [
+    {
+      "date": "Mon, 31 May 2021 20:18:06 GMT",
+      "tag": "@remote-ioc/electron-router_v0.1.1",
+      "version": "0.1.1",
+      "comments": {
+        "patch": [
+          {
+            "comment": "initial release",
+            "author": "dnchattan@gmail.com",
+            "commit": "2c6c3c0e7e2298e2f18b1322510df3bf9f3cdcb8",
+            "package": "@remote-ioc/electron-router"
+          }
+        ]
+      }
+    }
+  ]
+}

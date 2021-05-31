@@ -1,7 +1,0 @@
-{
-  "type": "major",
-  "comment": "re-write to use simpler, more usable api",
-  "packageName": "@remote-ioc/runtime",
-  "email": "dnchattan@gmail.com",
-  "dependentChangeType": "patch"
-}

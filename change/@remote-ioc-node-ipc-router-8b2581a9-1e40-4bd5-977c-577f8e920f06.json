@@ -1,7 +1,0 @@
-{
-  "type": "patch",
-  "comment": "initial release",
-  "packageName": "@remote-ioc/node-ipc-router",
-  "email": "dnchattan@gmail.com",
-  "dependentChangeType": "patch"
-}

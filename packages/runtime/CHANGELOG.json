@@ -2,6 +2,21 @@
   "name": "@remote-ioc/runtime",
   "entries": [
     {
+      "date": "Mon, 31 May 2021 20:18:06 GMT",
+      "tag": "@remote-ioc/runtime_v2.0.0",
+      "version": "2.0.0",
+      "comments": {
+        "major": [
+          {
+            "comment": "re-write to use simpler, more usable api",
+            "author": "dnchattan@gmail.com",
+            "commit": "3cd2d2006245cd25488885d3565a50c393aa8ae2",
+            "package": "@remote-ioc/runtime"
+          }
+        ]
+      }
+    },
+    {
       "date": "Sun, 23 May 2021 21:30:03 GMT",
       "tag": "@remote-ioc/runtime_v1.0.9",
       "version": "1.0.9",

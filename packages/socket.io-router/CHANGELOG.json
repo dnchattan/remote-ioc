@@ -1,0 +1,20 @@
+{
+  "name": "@remote-ioc/socket.io-router",
+  "entries": [
+    {
+      "date": "Mon, 31 May 2021 20:18:06 GMT",
+      "tag": "@remote-ioc/socket.io-router_v0.1.1",
+      "version": "0.1.1",
+      "comments": {
+        "patch": [
+          {
+            "comment": "initial release",
+            "author": "dnchattan@gmail.com",
+            "commit": "c7b729eb106ea264ba99948b46e429462935147b",
+            "package": "@remote-ioc/socket.io-router"
+          }
+        ]
+      }
+    }
+  ]
+}

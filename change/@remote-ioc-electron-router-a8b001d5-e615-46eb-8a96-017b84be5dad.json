@@ -1,7 +1,0 @@
-{
-  "type": "patch",
-  "comment": "initial release",
-  "packageName": "@remote-ioc/electron-router",
-  "email": "dnchattan@gmail.com",
-  "dependentChangeType": "patch"
-}

@@ -1,0 +1,20 @@
+{
+  "name": "@remote-ioc/process-router",
+  "entries": [
+    {
+      "date": "Mon, 31 May 2021 20:18:06 GMT",
+      "tag": "@remote-ioc/process-router_v0.1.1",
+      "version": "0.1.1",
+      "comments": {
+        "patch": [
+          {
+            "comment": "initial release",
+            "author": "dnchattan@gmail.com",
+            "commit": "e91acbeee64de62572369c4aa6ef102db0bb7a3e",
+            "package": "@remote-ioc/process-router"
+          }
+        ]
+      }
+    }
+  ]
+}

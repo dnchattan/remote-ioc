@@ -1,6 +1,6 @@
 {
   "name": "@remote-ioc/electron-router",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Electron IPC Router for @remote-ioc",
   "main": "lib/index.js",
   "author": "dnchattan@gmail.com",
@@ -11,14 +11,14 @@
     "ci": "just ci"
   },
   "peerDependencies": {
-    "@remote-ioc/runtime": "^1.1.0",
+    "@remote-ioc/runtime": "^2.0.0",
     "electron": "^12.0.0"
   },
   "dependencies": {
     "electron-is": "^3.0.0"
   },
   "devDependencies": {
-    "@remote-ioc/runtime": "^1.1.0",
+    "@remote-ioc/runtime": "^2.0.0",
     "@types/jest": "^26.0.20",
     "backfill": "^6.1.0",
     "electron": "^12.0.0",

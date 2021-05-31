@@ -1,8 +1,16 @@
 # Change Log - @remote-ioc/runtime
 
-This log was last generated on Sun, 23 May 2021 21:30:03 GMT and should not be manually modified.
+This log was last generated on Mon, 31 May 2021 20:18:06 GMT and should not be manually modified.
 
 <!-- Start content -->
+
+## 2.0.0
+
+Mon, 31 May 2021 20:18:06 GMT
+
+### Major changes
+
+- re-write to use simpler, more usable api (dnchattan@gmail.com)
 
 ## 1.0.9
 
