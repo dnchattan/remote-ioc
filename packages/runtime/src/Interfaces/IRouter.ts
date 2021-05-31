@@ -21,7 +21,7 @@ export interface IRouter {
   /**
    * Gets a socket for the provided Definition
    */
-  getSocket(Definition: Constructor): ISocket;
+  getSocket<I = Record<string, any>, O = Record<string, any>, C = unknown>(Definition: Constructor): ISocket<I, O, C>;
 
   on(event: 'discover', handler: (Definitions: string[]) => void): this;
   off(event: 'discover', handler: (Definitions: string[]) => void): this;

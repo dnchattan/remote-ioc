@@ -1,0 +1,9 @@
+{
+  "dependencies": [],
+  "tags": [
+    "messages"
+  ],
+  "exports": [
+    "index"
+  ]
+}

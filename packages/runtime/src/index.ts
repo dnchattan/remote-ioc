@@ -1,6 +1,7 @@
 export * from './Decorators';
 export * from './Helpers';
 export * from './Interfaces';
+export * from './Messages';
 export * from './Types';
 
 export * from './FunctionalApi';

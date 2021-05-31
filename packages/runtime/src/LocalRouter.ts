@@ -12,7 +12,7 @@ export class LocalRouter extends RouterBase {
     this.loopback.on('$local-router', 'discover/request', this.onDiscoverRequest);
     this.loopback.on('$local-router', 'discover/response', this.onDiscoverResponse);
     setTimeout(() => {
-      this.loopback.send('$local-router', 'discover/request');
+      this.loopback.send('$local-router', 'discover/request', undefined);
     }, 5);
   }
 
@@ -31,7 +31,7 @@ export class LocalRouter extends RouterBase {
     );
   };
 
-  getSocket(Definition: Constructor): ISocket {
+  protected getSocketCore(Definition: Constructor): ISocket {
     const scope = ApiDefinition.nameOf(Definition);
     const socket = this.loopback.createSocket(scope);
     return socket;
