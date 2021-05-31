@@ -2,6 +2,27 @@
   "name": "@remote-ioc/runtime",
   "entries": [
     {
+      "date": "Mon, 31 May 2021 22:08:19 GMT",
+      "tag": "@remote-ioc/runtime_v2.0.1",
+      "version": "2.0.1",
+      "comments": {
+        "patch": [
+          {
+            "comment": "add event handling",
+            "author": "dnchattan@gmail.com",
+            "commit": "2953af787d215599b0c050217e9669d6448419dd",
+            "package": "@remote-ioc/runtime"
+          },
+          {
+            "comment": "remove prototype/name from constructor",
+            "author": "dnchattan@gmail.com",
+            "commit": "521a2fe9279f48f8aa03e7ad8ae5dab9bc8d5502",
+            "package": "@remote-ioc/runtime"
+          }
+        ]
+      }
+    },
+    {
       "date": "Mon, 31 May 2021 20:18:06 GMT",
       "tag": "@remote-ioc/runtime_v2.0.0",
       "version": "2.0.0",

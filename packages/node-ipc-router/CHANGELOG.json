@@ -2,6 +2,21 @@
   "name": "@remote-ioc/node-ipc-router",
   "entries": [
     {
+      "date": "Mon, 31 May 2021 22:08:19 GMT",
+      "tag": "@remote-ioc/node-ipc-router_v0.1.3",
+      "version": "0.1.3",
+      "comments": {
+        "patch": [
+          {
+            "comment": "Bump @remote-ioc/runtime to v2.0.1",
+            "author": "dnchattan@gmail.com",
+            "commit": "2953af787d215599b0c050217e9669d6448419dd",
+            "package": "@remote-ioc/node-ipc-router"
+          }
+        ]
+      }
+    },
+    {
       "date": "Mon, 31 May 2021 20:19:33 GMT",
       "tag": "@remote-ioc/node-ipc-router_v0.1.2",
       "version": "0.1.2",

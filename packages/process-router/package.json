@@ -1,6 +1,6 @@
 {
   "name": "@remote-ioc/process-router",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Remote Process Router for @remote-ioc",
   "main": "lib/index.js",
   "author": "dnchattan@gmail.com",
@@ -11,11 +11,11 @@
     "ci": "just ci"
   },
   "peerDependencies": {
-    "@remote-ioc/runtime": "^2.0.0"
+    "@remote-ioc/runtime": "^2.0.1"
   },
   "dependencies": {},
   "devDependencies": {
-    "@remote-ioc/runtime": "^2.0.0",
+    "@remote-ioc/runtime": "^2.0.1",
     "@types/jest": "^26.0.20",
     "backfill": "^6.1.0",
     "jest": "^26.6.3",
