@@ -21,7 +21,7 @@ export class NodeIpcClientRouter extends RouterBase {
   public async queryDefinition(): Promise<boolean> {
     return true;
   }
-  public getSocket(Definition: Constructor): ISocket {
+  public getSocketCore(Definition: Constructor): ISocket {
     const name = ApiDefinition.nameOf(Definition);
     const ipc = new IPC();
     const id = `ipc-router/${this.id}/${name}`;

@@ -22,7 +22,7 @@ export class NodeIpcServerRouter extends RouterBase {
     return false;
   }
 
-  public getSocket(Definition: Constructor): ISocket {
+  public getSocketCore(Definition: Constructor): ISocket {
     const name = ApiDefinition.nameOf(Definition);
     const ipc = new IPC();
     ipc.config.id = `ipc-router/${this.id}/${name}`;
