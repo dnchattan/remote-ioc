@@ -4,7 +4,7 @@ import { CallMethod, GetPropertyValue, ClientMessages, ServerMessages, Subscript
 import { Constructor } from './Types';
 
 export class ProviderServer<D extends Constructor = Constructor> {
-  private enabledEvents = new Map<string, (...args: any[]) => void>();
+  private enabledEvents = new Map<string, (payload: any, context?: unknown) => void>();
   private readonly socket: ISocket<ClientMessages, ServerMessages>;
 
   constructor(Definition: D, private readonly provider: InstanceType<D>, router: IRouter) {
@@ -15,8 +15,8 @@ export class ProviderServer<D extends Constructor = Constructor> {
     this.socket.on('unsub', this.unsubscribe.bind(this));
   }
 
-  private forwardEvent(eventName: string, ...args: any[]) {
-    this.socket.send('send-event', { eventName, args });
+  private forwardEvent(eventName: string, payload: any, context?: unknown) {
+    this.socket.send('send-event', { eventName, payload }, context);
   }
 
   private async get({ promiseId, propertyName }: GetPropertyValue, context?: unknown): Promise<void> {

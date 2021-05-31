@@ -8,7 +8,7 @@ import { Constructor } from './Types';
 
 const internalKeys = ['constructor', 'on', 'off', 'emit'];
 
-export type MessageHandler = (...args: any[]) => void;
+export type MessageHandler = (payload: any, context?: unknown) => void;
 
 export function buildProxyFor<D extends Constructor>(Definition: D, deferredRouter: Promise<IRouter>): D {
   const definitionName = ApiDefinition.nameOf(Definition);
@@ -86,7 +86,7 @@ export function buildProxyFor<D extends Constructor>(Definition: D, deferredRout
   if (hasEvents(Definition)) {
     const eventListeners = new CollectionMap<string, MessageHandler>();
     Object.defineProperty(ApiProxyClass.prototype, 'on', {
-      value(eventName: string, handler: (...args: any[]) => void) {
+      value(eventName: string, handler: (message: any, context?: unknown) => void) {
         const listenerCount = eventListeners.push(eventName, handler);
         // first listener of this type?
         if (listenerCount === 1) {
@@ -96,7 +96,7 @@ export function buildProxyFor<D extends Constructor>(Definition: D, deferredRout
       },
     });
     Object.defineProperty(ApiProxyClass.prototype, 'off', {
-      value(eventName: string, handler: (...args: any[]) => void) {
+      value(eventName: string, handler: (message: any, context?: unknown) => void) {
         const oldLength = eventListeners.get(eventName).length;
         eventListeners.remove(eventName, handler);
         // last listener of this type?
@@ -108,8 +108,8 @@ export function buildProxyFor<D extends Constructor>(Definition: D, deferredRout
     });
 
     deferredSocket.then((socket) => {
-      socket.on('send-event', (message) =>
-        eventListeners.forEachValue(message.eventName, (handler) => handler(...message.args))
+      socket.on('send-event', (message, context) =>
+        eventListeners.forEachValue(message.eventName, (handler) => handler(message.payload, context))
       );
     });
   }
