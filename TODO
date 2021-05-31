@@ -4,7 +4,7 @@
   ✔ Add loopback "discovery" flow to LocalRouter
 
 # Functionality
-  ☐ Event support
+  ☐ Event support @started(21-05-31 17:19)
 
 # Routers
   ✔ Socket.io @done(21-05-30 17:37)
