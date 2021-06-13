@@ -1,0 +1,7 @@
+{
+  "type": "patch",
+  "comment": "add context support to electron ipc",
+  "packageName": "@remote-ioc/electron-router",
+  "email": "dnchattan@gmail.com",
+  "dependentChangeType": "patch"
+}
