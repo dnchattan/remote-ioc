@@ -1,0 +1,7 @@
+{
+  "type": "patch",
+  "comment": "add useCallingContext API",
+  "packageName": "@remote-ioc/electron-router",
+  "email": "dnchattan@gmail.com",
+  "dependentChangeType": "patch"
+}
