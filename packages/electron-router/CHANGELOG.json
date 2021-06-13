@@ -2,6 +2,21 @@
   "name": "@remote-ioc/electron-router",
   "entries": [
     {
+      "date": "Sun, 13 Jun 2021 20:29:41 GMT",
+      "tag": "@remote-ioc/electron-router_v0.1.3",
+      "version": "0.1.3",
+      "comments": {
+        "patch": [
+          {
+            "comment": "add context support to electron ipc",
+            "author": "dnchattan@gmail.com",
+            "commit": "a75f755b179591db4620b05e30a77be524d265c3",
+            "package": "@remote-ioc/electron-router"
+          }
+        ]
+      }
+    },
+    {
       "date": "Mon, 31 May 2021 22:08:19 GMT",
       "tag": "@remote-ioc/electron-router_v0.1.2",
       "version": "0.1.2",
