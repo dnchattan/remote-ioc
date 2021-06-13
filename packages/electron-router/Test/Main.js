@@ -1,4 +1,4 @@
-const { ApiProvider, useRouter, useApi } = require('@remote-ioc/runtime');
+const { ApiProvider, useRouter, useApi, useCallingContext } = require('@remote-ioc/runtime');
 const { app, BrowserWindow } = require('electron');
 const { ElectronRouter } = require('../lib');
 const path = require('path');
@@ -14,7 +14,7 @@ class MainApi {
     receiveData(value);
   }
   async done() {
-    if (data !== 'foo') {
+    if (data !== 'foo' || useCallingContext(this) === undefined) {
       process.exitCode = 1;
     } else {
       process.exitCode = 0;

@@ -3,6 +3,30 @@ import { IRouter, ISocket } from './Interfaces';
 import { CallMethod, GetPropertyValue, ClientMessages, ServerMessages, SubscriptionMessage } from './Messages';
 import { Constructor } from './Types';
 
+const contextMap = new Map<unknown, unknown>();
+
+export function useCallingContext<T>(target: unknown): T | undefined {
+  return contextMap.get(target) as T;
+}
+
+function getWithContext<T>(target: any, key: string, context?: any): T {
+  contextMap.set(target, context);
+  try {
+    return target[key];
+  } finally {
+    contextMap.delete(target);
+  }
+}
+
+function callWithContext<T>(target: unknown, fn: Function, args: unknown[], context?: any): T {
+  contextMap.set(target, context);
+  try {
+    return fn.apply(target, args);
+  } finally {
+    contextMap.delete(target);
+  }
+}
+
 export class ProviderServer<D extends Constructor = Constructor> {
   private enabledEvents = new Map<string, (payload: any, context?: unknown) => void>();
   private readonly socket: ISocket<ClientMessages, ServerMessages>;
@@ -21,7 +45,7 @@ export class ProviderServer<D extends Constructor = Constructor> {
 
   private async get({ promiseId, propertyName }: GetPropertyValue, context?: unknown): Promise<void> {
     try {
-      const value = this.provider[propertyName as keyof InstanceType<D>];
+      const value = getWithContext(this.provider, propertyName, context);
       this.socket.send('set-promise', { promiseId, success: true, value });
     } catch (e) {
       this.socket.send(
@@ -45,7 +69,7 @@ export class ProviderServer<D extends Constructor = Constructor> {
       if (fn === undefined || typeof fn !== 'function') {
         throw new Error(`'${methodName}' is not a function`);
       }
-      const value = await (fn.apply(this.provider, args) as Promise<any>);
+      const value: Promise<any> = await callWithContext(this.provider, fn, args, context);
       this.socket.send('set-promise', { promiseId, success: true, value }, context);
     } catch (e) {
       this.socket.send(
