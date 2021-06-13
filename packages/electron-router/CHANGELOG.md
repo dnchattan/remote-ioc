@@ -1,8 +1,16 @@
 # Change Log - @remote-ioc/electron-router
 
-This log was last generated on Sun, 13 Jun 2021 20:29:41 GMT and should not be manually modified.
+This log was last generated on Sun, 13 Jun 2021 20:52:57 GMT and should not be manually modified.
 
 <!-- Start content -->
+
+## 0.1.4
+
+Sun, 13 Jun 2021 20:52:57 GMT
+
+### Patches
+
+- add useCallingContext API (dnchattan@gmail.com)
 
 ## 0.1.3
 

@@ -1,8 +1,16 @@
 # Change Log - @remote-ioc/runtime
 
-This log was last generated on Mon, 31 May 2021 22:08:19 GMT and should not be manually modified.
+This log was last generated on Sun, 13 Jun 2021 20:52:57 GMT and should not be manually modified.
 
 <!-- Start content -->
+
+## 2.0.2
+
+Sun, 13 Jun 2021 20:52:57 GMT
+
+### Patches
+
+- add useCallingContext API (dnchattan@gmail.com)
 
 ## 2.0.1
 
