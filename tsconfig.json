@@ -12,6 +12,9 @@
       "path": "packages/electron-router/tsconfig.json"
     },
     {
+      "path": "packages/node-ipc-router/tsconfig.json"
+    },
+    {
       "path": "packages/process-router/tsconfig.json"
     },
     {
@@ -19,6 +22,9 @@
     },
     {
       "path": "packages/socket.io-router/tsconfig.json"
+    },
+    {
+      "path": "packages/ws-router/tsconfig.json"
     }
   ]
 }

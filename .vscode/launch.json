@@ -17,7 +17,7 @@
         "--config",
         "${workspaceFolder}/jest.config.js",
         "--testNamePattern",
-        "documentation sample"
+        "ws"
       ],
       "sourceMaps": true,
       "skipFiles": [
