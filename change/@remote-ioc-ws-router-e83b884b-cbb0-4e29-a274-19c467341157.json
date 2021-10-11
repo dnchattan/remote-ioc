@@ -1,0 +1,7 @@
+{
+  "type": "patch",
+  "comment": "add ws-router client",
+  "packageName": "@remote-ioc/ws-router",
+  "email": "dnchattan@gmail.com",
+  "dependentChangeType": "patch"
+}
