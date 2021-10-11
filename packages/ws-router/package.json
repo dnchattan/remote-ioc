@@ -1,6 +1,6 @@
 {
   "name": "@remote-ioc/ws-router",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "WebSocket Router for @remote-ioc",
   "main": "lib/index.js",
   "author": "dnchattan@gmail.com",

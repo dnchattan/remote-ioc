@@ -1,6 +1,21 @@
 {
-  "name": "@remote-ioc/process-router",
+  "name": "@remote-ioc/ws-router",
   "entries": [
+    {
+      "date": "Mon, 11 Oct 2021 21:15:43 GMT",
+      "tag": "@remote-ioc/ws-router_v0.1.1",
+      "version": "0.1.1",
+      "comments": {
+        "patch": [
+          {
+            "comment": "add ws-router client",
+            "author": "dnchattan@gmail.com",
+            "commit": "34eda4274f01d89b673240f9e25ed3d0cecf63a1",
+            "package": "@remote-ioc/ws-router"
+          }
+        ]
+      }
+    },
     {
       "date": "Sun, 13 Jun 2021 20:52:57 GMT",
       "tag": "@remote-ioc/process-router_v0.1.3",

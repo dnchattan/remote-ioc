@@ -1,8 +1,16 @@
-# Change Log - @remote-ioc/process-router
+# Change Log - @remote-ioc/ws-router
 
-This log was last generated on Sun, 13 Jun 2021 20:52:57 GMT and should not be manually modified.
+This log was last generated on Mon, 11 Oct 2021 21:15:43 GMT and should not be manually modified.
 
 <!-- Start content -->
+
+## 0.1.1
+
+Mon, 11 Oct 2021 21:15:43 GMT
+
+### Patches
+
+- add ws-router client (dnchattan@gmail.com)
 
 ## 0.1.3
 
