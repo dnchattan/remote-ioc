@@ -23,4 +23,10 @@ export interface IRuntime {
    * Gets a provider singleton for a given definition
    */
   getProvider<T extends Constructor>(Definition: T): InstanceType<T>;
+
+  /**
+   * Gets or creates a provider server
+   * @param Provider Provider to create a server for
+   */
+  getProviderServer<P extends Constructor>(Provider: P): unknown;
 }

@@ -1,13 +1,12 @@
 import { EventEmitter } from 'events';
 import { ApiDefinition, ApiProvider } from './Decorators';
-import { DefaultedMap } from './Helpers';
 import { IRouter, ISocket } from './Interfaces';
 import { ProviderServer } from './ProviderServer';
+import { getRuntime } from './RuntimeContext';
 import { Constructor } from './Types';
 
 export abstract class RouterBase extends EventEmitter implements IRouter {
   protected providers = new Set<Constructor>();
-  protected providerMap = new DefaultedMap<Constructor, unknown>((Provider) => new Provider());
   protected serverMap = new Map<Constructor, ProviderServer>();
 
   public getSocket<I = Record<string, any>, O = Record<string, any>, C = unknown>(
@@ -40,7 +39,7 @@ export abstract class RouterBase extends EventEmitter implements IRouter {
     if (this.serverMap.get(Definition)) {
       return this;
     }
-    const provider = this.providerMap.get(Provider) as InstanceType<D>;
+    const provider = getRuntime().getProviderServer(Provider) as InstanceType<D>;
     const server = new ProviderServer(Definition, provider, this);
     this.serverMap.set(Definition, server);
     return this;

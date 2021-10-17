@@ -18,6 +18,7 @@ export class Runtime implements IRuntime {
   );
   private definitionAvailability = new AvailabilityMap<Constructor, IRouter>();
   private providers = new Set<Constructor>();
+  public readonly providerMap = new DefaultedMap<Constructor, unknown>((Provider) => new Provider());
 
   constructor() {
     this.definitionAvailability.on('request', this.onFirstRequest);
@@ -67,6 +68,10 @@ export class Runtime implements IRuntime {
       router.registerProvider(Provider);
     }
     return this;
+  }
+
+  getProviderServer<P extends Constructor>(Provider: P) {
+    return this.providerMap.get(Provider);
   }
 
   getProvider<T extends Constructor>(Definition: T): InstanceType<T> {

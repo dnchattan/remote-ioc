@@ -11,11 +11,11 @@
     "ci": "just ci"
   },
   "peerDependencies": {
-    "@remote-ioc/runtime": "^2.0.2",
+    "@remote-ioc/runtime": "^2.0.3",
     "node-ipc": "^9.1.4"
   },
   "devDependencies": {
-    "@remote-ioc/runtime": "^2.0.2",
+    "@remote-ioc/runtime": "^2.0.3",
     "@types/jest": "^26.0.20",
     "@types/node-ipc": "^9.1.4",
     "backfill": "^6.1.0",
