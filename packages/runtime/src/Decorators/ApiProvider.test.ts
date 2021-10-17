@@ -16,6 +16,7 @@ describe('@ApiProvider', () => {
       registerProvider: jest.fn(),
       getProvider: jest.fn(),
       useRouter: jest.fn(),
+      getProviderServer: jest.fn(),
     };
     useRuntime(runtime, () => {
       @ApiDefinition('my-api')
@@ -32,6 +33,7 @@ describe('@ApiProvider', () => {
       registerProvider: jest.fn(),
       getProvider: jest.fn(),
       useRouter: jest.fn(),
+      getProviderServer: jest.fn(),
     };
     useRuntime(runtime, () => {
       @ApiDefinition('my-api-1')
