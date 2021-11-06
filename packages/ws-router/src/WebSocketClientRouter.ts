@@ -9,8 +9,8 @@ export class WebSocketClientRouter extends RouterBase {
     super();
     if (socket.readyState !== OPEN) {
       this.socket = new Promise((resolve, reject) => {
-        socket.on('error', reject);
-        socket.on('open', () => resolve(socket));
+        socket.addEventListener('error', reject);
+        socket.addEventListener('open', () => resolve(socket));
       });
     } else {
       this.socket = Promise.resolve(socket);
